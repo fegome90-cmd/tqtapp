@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#e7e8e9",
+                        "primary-fixed-dim": "#aac7ff",
+                        "background": "#f8f9fa",
+                        "surface-bright": "#f8f9fa",
+                        "outline-variant": "#c3c6d2",
+                        "on-primary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#001b3e",
+                        "outline": "#737782",
+                        "inverse-on-surface": "#f0f1f2",
+                        "tertiary": "#521e00",
+                        "on-background": "#191c1d",
+                        "on-error": "#ffffff",
+                        "on-surface": "#191c1d",
+                        "tertiary-fixed-dim": "#ffb692",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-primary": "#aac7ff",
+                        "on-primary-fixed-variant": "#07458c",
+                        "inverse-surface": "#2e3132",
+                        "surface-container": "#edeeef",
+                        "secondary-container": "#e80f16",
+                        "tertiary-fixed": "#ffdbcb",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#f3f4f5",
+                        "surface-dim": "#d9dadb",
+                        "primary-container": "#014389",
+                        "primary": "#002d60",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#87b2ff",
+                        "tertiary-container": "#752f00",
+                        "surface-container-highest": "#e1e3e4",
+                        "secondary-fixed": "#ffdad5",
+                        "secondary-fixed-dim": "#ffb4aa",
+                        "on-tertiary-container": "#fe9863",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#793101",
+                        "on-secondary-fixed": "#410001",
+                        "surface": "#f8f9fa",
+                        "on-surface-variant": "#424751",
+                        "on-tertiary-fixed": "#341100",
+                        "on-secondary-container": "#fffbff",
+                        "surface-variant": "#e1e3e4",
+                        "surface-tint": "#2d5ea5",
+                        "on-secondary-fixed-variant": "#930007",
+                        "primary-fixed": "#d6e3ff",
+                        "secondary": "#bc000c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1.5rem",
+                        "lg": "2.5rem",
+                        "xl": "4rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Nunito", "sans-serif"],
+                        "body": ["Nunito", "sans-serif"],
+                        "label": ["Nunito", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+        body {
+            min-height: 100dvh;
+            font-family: 'Nunito', sans-serif;
+        }
+        .chat-bubble-assistant {
+            border-bottom-left-radius: 4px;
+        }
+        .chat-bubble-user {
+            border-bottom-right-radius: 4px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface antialiased">
+<header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 w-full border-b border-surface-container">
+<div class="flex justify-between items-center px-6 h-16 w-full max-w-screen-xl mx-auto">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed">
+<img alt="Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiFhAZkG0Dqvm40EAPWvirWLyfPoBXMm7hx7__UY70pKY4eyNzpgM2n_rEXN7q2NyfqEyxLQE5xHhdhgsSzw8vlj4Ev3CzjOxSz40Xh4PWWDpYfAICmuvbkWKXAGVSdhMB-Jw2iLU74rs2qQGlIaHZ1271v3a8slfYC6OD8BilEOFyG4IX0jA5q1YtN06HFiJ4jWGxBjiuuZUQoEpT75lLon64iksLSKccot0hXUgNnxWZB2HnrJpyEidGBMPhrntvYt_gBrImhllo"/>
+</div>
+<div>
+<p class="text-[10px] uppercase tracking-wider font-black text-primary/60">Asistente</p>
+<span class="text-primary text-lg font-black leading-tight">FALP Sentinel</span>
+</div>
+</div>
+<button class="relative w-10 h-10 flex items-center justify-center text-primary-container bg-primary-fixed/30 rounded-full">
+<span class="material-symbols-outlined text-2xl">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+</div>
+</header>
+<main class="max-w-md mx-auto px-6 pt-10 pb-36 flex flex-col gap-8">
+<section class="flex flex-col gap-4 items-start">
+<div class="flex gap-3 items-end max-w-[85%]">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center shrink-0 mb-1">
+<span class="material-symbols-outlined text-white text-sm">smart_toy</span>
+</div>
+<div class="bg-white p-5 rounded-3xl chat-bubble-assistant shadow-sm border border-surface-container-high">
+<p class="text-on-surface font-bold text-xl leading-snug">Hola, ¿cómo te sientes hoy?</p>
+</div>
+</div>
+<div class="w-full mt-4 flex flex-col gap-3">
+<button class="w-full group flex items-center gap-4 p-5 bg-white border-2 border-transparent hover:border-primary-container rounded-3xl shadow-[0_8px_20px_-6px_rgba(0,0,0,0.05)] transition-all active:scale-95">
+<div class="w-14 h-14 bg-error-container/40 rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl text-error filled-icon">sentiment_very_dissatisfied</span>
+</div>
+<div class="text-left">
+<p class="font-black text-lg text-on-surface">Me Duele Algo</p>
+<p class="text-sm text-on-surface-variant font-medium">Necesito alivio para un malestar</p>
+</div>
+</button>
+<button class="w-full group flex items-center gap-4 p-5 bg-white border-2 border-transparent hover:border-primary-container rounded-3xl shadow-[0_8px_20px_-6px_rgba(0,0,0,0.05)] transition-all active:scale-95">
+<div class="w-14 h-14 bg-tertiary-fixed/40 rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl text-tertiary-container filled-icon">favorite</span>
+</div>
+<div class="text-left">
+<p class="font-black text-lg text-on-surface">Quiero Compañía</p>
+<p class="text-sm text-on-surface-variant font-medium">Me gustaría hablar con alguien</p>
+</div>
+</button>
+<button class="w-full group flex items-center gap-4 p-5 bg-white border-2 border-transparent hover:border-primary-container rounded-3xl shadow-[0_8px_20px_-6px_rgba(0,0,0,0.05)] transition-all active:scale-95">
+<div class="w-14 h-14 bg-primary-fixed/40 rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl text-primary-container filled-icon">widgets</span>
+</div>
+<div class="text-left">
+<p class="font-black text-lg text-on-surface">Otras Necesidades</p>
+<p class="text-sm text-on-surface-variant font-medium">Alimentación, aire o comodidad</p>
+</div>
+</button>
+</div>
+</section>
+<section class="mt-4 flex flex-col gap-6 items-center">
+<div class="w-full h-[2px] bg-surface-container-highest opacity-50 rounded-full"></div>
+<div class="text-center px-4">
+<p class="text-on-surface-variant font-bold text-base mb-4 italic">Si es algo urgente, pulsa aquí:</p>
+<button class="w-full py-5 px-8 rounded-3xl flex flex-col items-center justify-center gap-2 active:scale-95 transition-all bg-[#014389] shadow-[0_20px_40px_-12px_rgba(1,67,137,0.4)] text-white group">
+<div class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mb-1 group-hover:bg-white/20 transition-colors">
+<span class="material-symbols-outlined text-4xl filled-icon">notifications_active</span>
+</div>
+<span class="font-black text-2xl tracking-tight">Llamado de Asistencia</span>
+<span class="text-white/70 text-xs font-bold uppercase tracking-widest">Enfermería te responderá pronto</span>
+</button>
+</div>
+</section>
+</main>
+<div class="fixed bottom-6 left-6 right-6 z-50">
+<nav class="flex justify-around items-center px-2 py-3 bg-white/90 backdrop-blur-xl rounded-[2.5rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] border border-white/50">
+<a class="flex flex-col items-center justify-center text-outline-variant px-5 py-2 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">home</span>
+<span class="text-[10px] font-black uppercase mt-1">Inicio</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-white rounded-[2rem] px-8 py-3 shadow-lg shadow-primary-container/20 active:scale-90 transition-all" href="#">
+<span class="material-symbols-outlined text-2xl filled-icon">forum</span>
+<span class="text-[10px] font-black uppercase mt-1">Hablar</span>
+</a>
+<a class="flex flex-col items-center justify-center text-outline-variant px-5 py-2 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">history</span>
+<span class="text-[10px] font-black uppercase mt-1">Bitácora</span>
+</a>
+</nav>
+</div>
+<div class="fixed inset-0 -z-10 bg-surface overflow-hidden">
+<div class="absolute -top-20 -right-20 w-80 h-80 bg-primary-fixed/20 rounded-full blur-3xl"></div>
+<div class="absolute top-1/2 -left-20 w-60 h-60 bg-error-container/10 rounded-full blur-3xl"></div>
+<div class="absolute -bottom-20 right-10 w-96 h-96 bg-tertiary-fixed/10 rounded-full blur-3xl"></div>
+</div>
+
+</body></html>

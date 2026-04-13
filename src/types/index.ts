@@ -1,4 +1,13 @@
-export type CategoryId = 'urgente' | 'dolor' | 'respiracion' | 'secreciones' | 'posicion' | 'familia' | 'necesidades' | 'emociones' | 'gratitud';
+export type CategoryId =
+  | 'urgente'
+  | 'dolor'
+  | 'respiracion'
+  | 'secreciones'
+  | 'posicion'
+  | 'familia'
+  | 'necesidades'
+  | 'emociones'
+  | 'gratitud';
 
 export interface Category {
   id: CategoryId;
