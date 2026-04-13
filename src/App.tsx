@@ -8,6 +8,7 @@ import type { TabId } from './components/layout/BottomNav';
 import TopBar from './components/layout/TopBar';
 import { CATEGORIES, MOCK_PHRASES } from './data/mock';
 import { TTSSpeakerProvider, useTTS } from './lib/tts/TTSContext';
+import type { TTSProvider } from './lib/tts/ports/TTSPort';
 import type { CategoryId } from './types';
 
 // Mapeo de colores para categorías (propiedades separadas en lugar de string dividible)
@@ -328,7 +329,7 @@ function MainApp() {
 // Componente wrapper que envuelve la app con el Provider TTS
 export default function App({
   ttsProvider,
-}: { ttsProvider?: import('./lib/tts/ports/TTSPort').TTSProvider } = {}) {
+}: { ttsProvider?: TTSProvider } = {}) {
   return (
     <TTSSpeakerProvider provider={ttsProvider}>
       <MainApp />
