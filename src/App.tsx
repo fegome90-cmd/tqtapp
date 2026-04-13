@@ -1,29 +1,29 @@
-import { ChevronLeft, Mic, Play, Star, Volume2 } from 'lucide-react';
+import { Mic, Play, Star, Volume2 } from 'lucide-react';
 import { useState } from 'react';
 import CategoryCard from './components/cards/CategoryCard';
 import EmergencyCTA from './components/cards/EmergencyCTA';
 import PhraseCard from './components/cards/PhraseCard';
 import BottomNav from './components/layout/BottomNav';
+import type { TabId } from './components/layout/BottomNav';
+import TopBar from './components/layout/TopBar';
 import { CATEGORIES, MOCK_PHRASES } from './data/mock';
 import { TTSSpeakerProvider, useTTS } from './lib/tts/TTSContext';
 import type { CategoryId } from './types';
 
-// Mapeo de colores para categorías
-const categoryColors: Record<string, string> = {
-  urgente: 'bg-red-50 text-red-600 border-red-200',
-  respiracion: 'bg-blue-50 text-blue-600 border-blue-200',
-  secreciones: 'bg-cyan-50 text-cyan-600 border-cyan-200',
-  dolor: 'bg-orange-50 text-orange-600 border-orange-200',
-  posicion: 'bg-indigo-50 text-indigo-600 border-indigo-200',
-  familia: 'bg-purple-50 text-purple-600 border-purple-200',
-  necesidades: 'bg-emerald-50 text-emerald-600 border-emerald-200',
-  emociones: 'bg-pink-50 text-pink-600 border-pink-200',
+// Mapeo de colores para categorías (propiedades separadas en lugar de string dividible)
+const categoryColors: Record<string, { iconBg: string; iconText: string }> = {
+  urgente: { iconBg: 'bg-red-50', iconText: 'text-red-600' },
+  respiracion: { iconBg: 'bg-blue-50', iconText: 'text-blue-600' },
+  secreciones: { iconBg: 'bg-cyan-50', iconText: 'text-cyan-600' },
+  dolor: { iconBg: 'bg-orange-50', iconText: 'text-orange-600' },
+  posicion: { iconBg: 'bg-indigo-50', iconText: 'text-indigo-600' },
+  familia: { iconBg: 'bg-purple-50', iconText: 'text-purple-600' },
+  necesidades: { iconBg: 'bg-emerald-50', iconText: 'text-emerald-600' },
+  emociones: { iconBg: 'bg-pink-50', iconText: 'text-pink-600' },
 };
 
 function MainApp() {
-  const [currentTab, setCurrentTab] = useState<
-    'home' | 'talk' | 'favs' | 'profile'
-  >('home');
+  const [currentTab, setCurrentTab] = useState<TabId>('home');
   const [activeCategory, setActiveCategory] = useState<CategoryId | null>(null);
   const [favorites, setFavorites] = useState<string[]>([
     'p1',
@@ -37,21 +37,13 @@ function MainApp() {
   // Hook TTS para síntesis de voz
   const { speak, isSpeaking } = useTTS();
 
-  const handlePlay = async (id: string, phraseText?: string) => {
+  const handlePlay = (id: string, phraseText?: string) => {
     setPlayingId(id);
-    try {
-      if (phraseText) {
-        await speak(phraseText);
-      } else {
-        // Fallback para botones sin texto (emergencia)
-        await speak('Necesito ayuda');
-      }
-    } catch {
-      // Silently handle TTS errors
-    } finally {
-      // Esperar un poco antes de limpiar el estado de reproducción
-      setTimeout(() => setPlayingId(null), 1500);
-    }
+    speak(phraseText || 'Necesito ayuda')
+      .catch(() => {
+        // Silently handle TTS errors
+      })
+      .finally(() => setPlayingId(null));
   };
 
   const handleEmergency = () => {
@@ -64,51 +56,10 @@ function MainApp() {
     );
   };
 
-  // Función para mapear el tab actual al formato de BottomNav
-  // BottomNav usa 'history' pero App usa 'favs' - normalizamos aquí
-  const handleTabChange = (tab: 'home' | 'talk' | 'history' | 'profile') => {
-    // Map 'history' to 'favs' for App's internal state
-    const mappedTab = tab === 'history' ? 'favs' : tab;
-    setCurrentTab(mappedTab as 'home' | 'talk' | 'favs' | 'profile');
+  const handleTabChange = (tab: TabId) => {
+    setCurrentTab(tab);
     if (tab === 'home') setActiveCategory(null);
   };
-
-  // Componente Header local para reuso visual
-  const TopBar = ({
-    title,
-    showBack,
-  }: {
-    title: string;
-    showBack?: boolean;
-  }) => (
-    <header className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-slate-200/60 px-5 py-4 flex items-center justify-between">
-      <div className="flex items-center gap-3">
-        {showBack && (
-          <button
-            type="button"
-            onClick={() => setActiveCategory(null)}
-            className="p-2 rounded-full hover:bg-slate-100 active:bg-slate-200 transition-colors"
-            aria-label="Volver"
-          >
-            <ChevronLeft
-              className="w-7 h-7 text-slate-700"
-              aria-hidden="true"
-            />
-          </button>
-        )}
-        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-          {title}
-        </h1>
-      </div>
-      <button
-        type="button"
-        className="w-10 h-10 rounded-full bg-slate-50 hover:bg-slate-100 active:bg-slate-200 flex items-center justify-center border border-slate-200/60 transition-colors"
-        aria-label="Volumen"
-      >
-        <Volume2 className="w-5 h-5 text-slate-400" aria-hidden="true" />
-      </button>
-    </header>
-  );
 
   return (
     <div className="w-full max-w-2xl mx-auto h-screen sm:h-[95vh] sm:mt-[2.5vh] sm:rounded-[2.5rem] bg-slate-50 flex flex-col font-sans relative sm:shadow-2xl overflow-hidden sm:border-[3px] sm:border-slate-300">
@@ -121,7 +72,7 @@ function MainApp() {
             <div className="p-5 space-y-8">
               {/* Botón Principal de Emergencia */}
               <div>
-                <EmergencyCTA onClick={handleEmergency} />
+                <EmergencyCTA onClick={handleEmergency} isPlaying={playingId === 'urgency_main'} />
               </div>
 
               {/* Grilla de Categorías usando CategoryCard */}
@@ -131,17 +82,16 @@ function MainApp() {
                 </h2>
                 <div className="grid grid-cols-2 gap-4">
                   {CATEGORIES.map((cat) => {
-                    const colorClass =
-                      categoryColors[cat.id] || categoryColors.necesidades;
-                    const [bgColor, textColor] = colorClass.split(' ');
+                    const colors =
+                      categoryColors[cat.id] ?? categoryColors.necesidades;
                     return (
                       <CategoryCard
                         key={cat.id}
                         icon={cat.icon}
                         title={cat.title}
-                        description={cat.description || ''}
-                        iconBgColor={bgColor}
-                        iconColor={textColor}
+                        description={cat.description}
+                        iconBgColor={colors.iconBg}
+                        iconColor={colors.iconText}
                         onClick={() => setActiveCategory(cat.id)}
                       />
                     );
@@ -154,13 +104,14 @@ function MainApp() {
 
         {/* 2. VISTA DETALLE DE CATEGORÍA */}
         {activeCategory && currentTab === 'home' && (
-          <div className="transition-all duration-300 transform translate-x-0">
+          <div className="transition-opacity duration-300">
             <TopBar
               title={
                 CATEGORIES.find((c) => c.id === activeCategory)?.title ||
                 'Frases'
               }
               showBack
+              onBack={() => setActiveCategory(null)}
             />
             <div className="p-5 space-y-4">
               {MOCK_PHRASES.filter((p) => p.categoryId === activeCategory).map(
@@ -221,7 +172,7 @@ function MainApp() {
                 type="button"
                 onClick={() => handlePlay('free_text', freeText)}
                 disabled={!freeText.trim() || isSpeaking}
-                className="w-full bg-slate-900 disabled:bg-slate-300 disabled:scale-100 text-white rounded-3xl p-5 flex items-center justify-center gap-3 active:scale-[0.98] transition-all"
+                className="w-full bg-slate-900 disabled:bg-slate-300 disabled:scale-100 text-white rounded-3xl p-5 flex items-center justify-center gap-3 active:scale-[0.98] transition-colors"
               >
                 <Play className="w-6 h-6 fill-white" />
                 <span className="text-xl font-semibold tracking-wide">
@@ -354,7 +305,7 @@ function MainApp() {
 
                   <button
                     type="button"
-                    className="w-full bg-white text-indigo-700 font-bold text-lg py-4 rounded-2xl shadow-sm hover:bg-blue-50 active:scale-[0.98] transition-all relative z-10"
+                    className="w-full bg-white text-indigo-700 font-bold text-lg py-4 rounded-2xl shadow-sm hover:bg-blue-50 active:scale-[0.98] transition-colors relative z-10"
                   >
                     Continuar Grabando
                   </button>
@@ -367,7 +318,7 @@ function MainApp() {
 
       {/* NAVEGACIÓN INFERIOR PERSISTENTE (BOTTOM TABS) */}
       <BottomNav
-        currentTab={currentTab === 'favs' ? 'history' : currentTab}
+        currentTab={currentTab}
         onTabChange={handleTabChange}
       />
     </div>
@@ -375,9 +326,11 @@ function MainApp() {
 }
 
 // Componente wrapper que envuelve la app con el Provider TTS
-export default function App() {
+export default function App({
+  ttsProvider,
+}: { ttsProvider?: import('./lib/tts/ports/TTSPort').TTSProvider } = {}) {
   return (
-    <TTSSpeakerProvider>
+    <TTSSpeakerProvider provider={ttsProvider}>
       <MainApp />
     </TTSSpeakerProvider>
   );

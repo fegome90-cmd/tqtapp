@@ -65,14 +65,14 @@
       npm run test:frontend:headed
       ```
 
-## Phase 9: Quality Infrastructure ( backlog )
+## Phase 9: Quality Infrastructure (in progress)
 
 ### 9.1 Unit Tests
-- [ ] 9.1.1 Instalar Vitest (`npm install -D vitest @testing-library/react @testing-library/jest-dom`)
-- [ ] 9.1.2 Crear `vitest.config.ts` con configuración para este proyecto
-- [ ] 9.1.3 Agregar script `test` a package.json: `"test": "vitest run"`
+- [x] 9.1.1 Instalar Vitest (`npm install -D vitest @testing-library/react @testing-library/jest-dom`)
+- [x] 9.1.2 Crear `vitest.config.ts` con configuración para este proyecto
+- [x] 9.1.3 Agregar script `test` a package.json: `"test": "vitest run"`
 - [ ] 9.1.4 Escribir tests unitarios para TTSPort (verifica interfaces y mock provider)
-- [ ] 9.1.5 Escribir tests unitarios para componentes: CategoryCard, PhraseCard
+- [x] 9.1.5 Escribir tests unitarios para componentes: CategoryCard, PhraseCard
 
 ### 9.2 Conventional Commits
 - [ ] 9.2.1 Instalar husky + commitlint: `npm install -D husky @commitlint/cli @commitlint/config-conventional`
@@ -139,7 +139,7 @@
 | Type Check | TypeScript | ✅ Ready | `tsc --noEmit` — ya configurado |
 | Build | Vite | ✅ Ready | `npm run build` — ya configurado |
 | E2E Smoke | agent-browser | ✅ Ready | `npm run test:frontend` — ya configurado |
-| Unit Tests | Vitest | ❌ Backlog | No instalado aún |
+| Unit Tests | Vitest | ✅ Ready | `npm run test` — instalado y configurado |
 | Commit Convention | husky + commitlint | ❌ Backlog | No configurado |
 | CI/CD | GitHub Actions | ❌ Backlog | No configurado |
 | Coverage Gate | Vitest coverage | ❌ Backlog | Requires unit tests first |

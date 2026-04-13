@@ -1,4 +1,4 @@
-import { render, screen, act, within } from '@testing-library/react';
+import { render, screen, act, within, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import App from '../App';
@@ -27,29 +27,24 @@ describe('Home tab', () => {
       'Emociones',
     ]) {
       expect(
-        screen.getByRole('button', { name: new RegExp(`^${label}$`, 'i') }),
+        screen.getByRole('button', { name: new RegExp(label, 'i') }),
       ).toBeInTheDocument();
     }
   });
 
   it('emergency button adds animate-pulse on click and clears after 1200ms', async () => {
     vi.useFakeTimers();
-    const user = userEvent.setup({
-      advanceTimers: vi.advanceTimersByTime.bind(vi),
-    });
     render(<App />);
 
-    const btn = screen
-      .getAllByRole('button')
-      .find(
-        (b) => b.textContent?.trim() === 'Llamado de Asistencia',
-      ) as HTMLButtonElement;
-    await user.click(btn);
+    const btn = screen.getByRole('button', { name: /Llamado de Asistencia/i });
+    act(() => fireEvent.click(btn));
     expect(btn.className).toContain('animate-pulse');
 
-    act(() => vi.advanceTimersByTime(1200));
+    await act(async () => {
+      vi.advanceTimersByTime(1200);
+      await Promise.resolve();
+    });
     expect(btn.className).not.toContain('animate-pulse');
-    vi.useRealTimers();
   });
 });
 
@@ -60,7 +55,7 @@ describe('Category detail', () => {
   it('navigates to a category and shows its phrases', async () => {
     const user = userEvent.setup();
     render(<App />);
-    await user.click(screen.getByRole('button', { name: /^Dolor$/ }));
+    await user.click(screen.getByRole('button', { name: /Dolor/i }));
 
     expect(screen.getByText('Dolor')).toBeInTheDocument();
     expect(screen.getByText('Tengo dolor')).toBeInTheDocument();
@@ -71,7 +66,7 @@ describe('Category detail', () => {
   it('back button returns to home', async () => {
     const user = userEvent.setup();
     render(<App />);
-    await user.click(screen.getByRole('button', { name: /^Dolor$/ }));
+    await user.click(screen.getByRole('button', { name: /Dolor/i }));
     await user.click(screen.getByRole('button', { name: 'Volver' }));
 
     expect(screen.getByText('Categorías Frecuentes')).toBeInTheDocument();
@@ -80,35 +75,34 @@ describe('Category detail', () => {
   it('shows empty state for a category with no phrases', async () => {
     const user = userEvent.setup();
     render(<App />);
-    await user.click(screen.getByRole('button', { name: /^Urgente$/ }));
+    await user.click(screen.getByRole('button', { name: /Urgente/i }));
 
     expect(screen.getByText('Categoría en construcción.')).toBeInTheDocument();
   });
 
   it('phrase play button sets playing state and clears after 1200ms', async () => {
     vi.useFakeTimers();
-    const user = userEvent.setup({
-      advanceTimers: vi.advanceTimersByTime.bind(vi),
-    });
     render(<App />);
-    await user.click(screen.getByRole('button', { name: /^Dolor$/ }));
+    act(() => fireEvent.click(screen.getByRole('button', { name: /Dolor/i })));
 
     const phraseBtn = screen.getByRole('button', { name: /Tengo dolor/i });
-    await user.click(phraseBtn);
+    act(() => fireEvent.click(phraseBtn));
 
     // Indicator dot inside the button has the playing class
     const dot = phraseBtn.querySelector('div');
-    expect(dot?.className).toContain('bg-blue-500');
+    expect(dot?.className).toContain('bg-primary-container');
 
-    act(() => vi.advanceTimersByTime(1200));
-    expect(dot?.className).not.toContain('bg-blue-500');
-    vi.useRealTimers();
+    await act(async () => {
+      vi.advanceTimersByTime(1200);
+      await Promise.resolve();
+    });
+    expect(dot?.className).not.toContain('bg-primary-container');
   });
 
   it('removes a phrase already in favorites', async () => {
     const user = userEvent.setup();
     render(<App />);
-    await user.click(screen.getByRole('button', { name: /^Dolor$/ }));
+    await user.click(screen.getByRole('button', { name: /Dolor/i }));
 
     // p1 ('Tengo dolor') is a default favorite; second button is the star
     const card = screen
@@ -125,7 +119,7 @@ describe('Category detail', () => {
   it('adds a phrase not yet in favorites', async () => {
     const user = userEvent.setup();
     render(<App />);
-    await user.click(screen.getByRole('button', { name: /^Dolor$/ }));
+    await user.click(screen.getByRole('button', { name: /Dolor/i }));
 
     // p2 ('El dolor es insoportable') is NOT a default favorite
     const card = screen
@@ -142,11 +136,11 @@ describe('Category detail', () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.click(screen.getByRole('button', { name: /^Respiración$/ }));
+    await user.click(screen.getByRole('button', { name: /Respiración/i }));
     expect(screen.getByText('Me falta el aire')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Volver' }));
 
-    await user.click(screen.getByRole('button', { name: /^Emociones$/ }));
+    await user.click(screen.getByRole('button', { name: /Emociones/i }));
     expect(screen.getByText('Tengo mucho miedo')).toBeInTheDocument();
   });
 });
@@ -182,7 +176,7 @@ describe('Talk tab', () => {
     render(<App />);
     await user.click(screen.getByRole('button', { name: /^Escribir$/i }));
     await user.type(
-      screen.getByPlaceholderText('Toca para escribir...'),
+      screen.getByPlaceholderText('Toca para escribir…'),
       'Hola',
     );
 
@@ -205,7 +199,7 @@ describe('Talk tab', () => {
     render(<App />);
     await user.click(screen.getByRole('button', { name: /^Escribir$/i }));
     await user.type(
-      screen.getByPlaceholderText('Toca para escribir...'),
+      screen.getByPlaceholderText('Toca para escribir…'),
       'Hola',
     );
     await user.click(screen.getByRole('button', { name: 'Gracias' }));
@@ -224,22 +218,24 @@ describe('Talk tab', () => {
   });
 
   it('play button triggers play state and clears after 1200ms', async () => {
-    vi.useFakeTimers();
-    const user = userEvent.setup({
-      advanceTimers: vi.advanceTimersByTime.bind(vi),
-    });
+    const user = userEvent.setup();
     render(<App />);
+    // Navigate and type with real timers (no fake timer issues)
     await user.click(screen.getByRole('button', { name: /^Escribir$/i }));
     await user.type(
-      screen.getByPlaceholderText('Toca para escribir...'),
+      screen.getByPlaceholderText('Toca para escribir…'),
       'Test',
     );
 
+    // Switch to fake timers only for the play interaction
+    vi.useFakeTimers();
     const playBtn = screen.getByRole('button', { name: /Reproducir Mensaje/i });
-    await user.click(playBtn);
-    act(() => vi.advanceTimersByTime(1200));
+    act(() => fireEvent.click(playBtn));
+    await act(async () => {
+      vi.advanceTimersByTime(1200);
+      await Promise.resolve();
+    });
 
-    vi.useRealTimers();
     // After timer resolves no error is thrown; play button stays enabled
     expect(playBtn).not.toBeDisabled();
   });
@@ -261,19 +257,18 @@ describe('Favorites tab', () => {
 
   it('plays a favorite phrase', async () => {
     vi.useFakeTimers();
-    const user = userEvent.setup({
-      advanceTimers: vi.advanceTimersByTime.bind(vi),
-    });
     render(<App />);
-    await user.click(screen.getByRole('button', { name: /^Favoritos$/i }));
+    act(() => fireEvent.click(screen.getByRole('button', { name: /^Favoritos$/i })));
 
     const phraseBtn = screen.getByRole('button', { name: /Tengo dolor/i });
-    await user.click(phraseBtn);
+    act(() => fireEvent.click(phraseBtn));
     const dot = phraseBtn.querySelector('div');
-    expect(dot?.className).toContain('bg-blue-500');
+    expect(dot?.className).toContain('bg-primary-container');
 
-    act(() => vi.advanceTimersByTime(1200));
-    vi.useRealTimers();
+    await act(async () => {
+      vi.advanceTimersByTime(1200);
+      await Promise.resolve();
+    });
   });
 
   it('removes a phrase from favorites via the star button', async () => {
@@ -281,11 +276,11 @@ describe('Favorites tab', () => {
     render(<App />);
     await user.click(screen.getByRole('button', { name: /^Favoritos$/i }));
 
-    // Star/remove buttons have no text content (icon-only)
-    const removeButtons = screen
-      .getAllByRole('button')
-      .filter((btn) => !btn.textContent?.trim());
-    await user.click(removeButtons[0]);
+    // Click the first "Quitar de favoritos" star button (p1 = 'Tengo dolor')
+    const [firstRemoveBtn] = screen.getAllByRole('button', {
+      name: /Quitar de favoritos/i,
+    });
+    await user.click(firstRemoveBtn);
 
     expect(screen.queryByText('Tengo dolor')).not.toBeInTheDocument();
   });
@@ -295,15 +290,14 @@ describe('Favorites tab', () => {
     render(<App />);
     await user.click(screen.getByRole('button', { name: /^Favoritos$/i }));
 
-    let removeButtons = screen
-      .getAllByRole('button')
-      .filter((btn) => !btn.textContent?.trim());
-
+    let removeButtons = screen.queryAllByRole('button', {
+      name: /Quitar de favoritos/i,
+    });
     while (removeButtons.length > 0) {
       await user.click(removeButtons[0]);
-      removeButtons = screen
-        .getAllByRole('button')
-        .filter((btn) => !btn.textContent?.trim());
+      removeButtons = screen.queryAllByRole('button', {
+        name: /Quitar de favoritos/i,
+      });
     }
 
     expect(
@@ -366,7 +360,7 @@ describe('Bottom navigation', () => {
   it('Inicio nav resets active category when coming from category detail', async () => {
     const user = userEvent.setup();
     render(<App />);
-    await user.click(screen.getByRole('button', { name: /^Dolor$/ }));
+    await user.click(screen.getByRole('button', { name: /Dolor/i }));
     expect(screen.getByText('Tengo dolor')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /^Inicio$/i }));

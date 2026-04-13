@@ -7,15 +7,16 @@ export default function Header({ avatarSrc }: HeaderProps) {
     <header className="sticky top-0 z-50 w-full border-b border-surface-container bg-white/80 backdrop-blur-md">
       <div className="flex justify-between items-center px-6 h-16 w-full max-w-screen-xl mx-auto">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed">
-            <img
-              alt="Avatar"
-              className="w-full h-full object-cover"
-              src={
-                avatarSrc ||
-                'https://lh3.googleusercontent.com/aida-public/AB6AXuDiFhAZkG0Dqvm40EAPWvirWLyfPoBXMm7hx7__UY70pKY4eyNzpgM2n_rEXN7q2NyfqEyxLQE5xHhdhgsSzw8vlj4Ev3CzjOxSz40Xh4PWWDpYfAICmuvbkWKXAGVSdhMB-Jw2iLU74rs2qQGlIaHZ1271v3a8slfYC6OD8BilEOFyG4IX0jA5q1YtN06HFiJ4jWGxBjiuuZUQoEpT75lLon64iksLSKccot0hXUgNnxWZB2HnrJpyEidGBMPhrntvYt_gBrImhllo'
-              }
-            />
+          <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed bg-slate-200 flex items-center justify-center">
+            {avatarSrc ? (
+              <img
+                alt="Avatar"
+                className="w-full h-full object-cover"
+                src={avatarSrc}
+              />
+            ) : (
+              <span className="text-slate-500 text-xs font-bold" aria-hidden="true">MR</span>
+            )}
           </div>
           <div>
             <p className="text-[10px] uppercase tracking-wider font-black text-primary/60">

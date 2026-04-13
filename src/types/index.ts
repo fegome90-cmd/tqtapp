@@ -14,7 +14,7 @@ export interface Category {
   title: string;
   icon: string;
   color: string;
-  description?: string;
+  description: string;
 }
 
 export interface Phrase {
