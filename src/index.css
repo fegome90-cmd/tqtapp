@@ -1,5 +1,45 @@
 @import "tailwindcss";
 
+:root {
+  --surface-0: #f8f9fa;
+  --surface-1: #ffffff;
+  --surface-2: #f1f5f9;
+  --border-default: rgba(0, 0, 0, 0.08);
+  --border-subtle: rgba(0, 0, 0, 0.04);
+  --border-strong: rgba(0, 0, 0, 0.15);
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-tertiary: #94a3b8;
+  --text-muted: #cbd5e1;
+}
+
+body {
+  min-height: 100dvh;
+  font-family: "Nunito", sans-serif;
+}
+
+/* Focus visible para botones */
+button:focus-visible {
+  outline: 2px solid var(--color-primary, #002d60);
+  outline-offset: 2px;
+}
+
+/* Reduced motion para usuarios sensibles */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Touch action para evitar delay de doble tap */
+button {
+  touch-action: manipulation;
+}
+
 .pb-safe {
   padding-bottom: env(safe-area-inset-bottom, 1.5rem);
 }
@@ -9,4 +49,24 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Material Symbols utilities */
+.material-symbols-outlined {
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
+}
+.filled-icon {
+  font-variation-settings: "FILL" 1;
+}
+
+/* Chat bubbles with Material radius */
+.chat-bubble-assistant {
+  border-bottom-left-radius: 4px;
+}
+.chat-bubble-user {
+  border-bottom-right-radius: 4px;
 }
