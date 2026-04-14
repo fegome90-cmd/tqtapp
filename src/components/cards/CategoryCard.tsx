@@ -45,7 +45,7 @@ export default function CategoryCard({
     <button
       type="button"
       onClick={onClick}
-      className={`w-full p-4 bg-white rounded-2xl hover:bg-white/80 transition-all active:scale-[0.98] flex items-center gap-4 text-left ${colorClasses}`}
+      className={`w-full p-4 bg-white rounded-2xl border hover:bg-white/80 transition-all active:scale-[0.98] flex items-center gap-4 text-left ${colorClasses}`}
     >
       <div
         className={`w-14 h-14 rounded-2xl flex items-center justify-center ${colorClasses}`}

@@ -1,7 +1,21 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
+import { MainApp } from '../App';
 import App from '../App';
+import { TTSSpeakerProvider } from '../lib/tts/TTSContext';
+import { PatientProvider } from '../hooks/usePatient';
+import type { TTSConfig } from '../lib/tts/ports/TTSPort';
+
+class RejectingTTSProvider {
+  async speak(_text: string, _config?: TTSConfig): Promise<void> {
+    throw new Error('TTS failed');
+  }
+  stop(): void {}
+  isSpeaking(): boolean {
+    return false;
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Home tab
@@ -426,5 +440,38 @@ describe('Bottom navigation', () => {
 
     await user.click(screen.getByRole('button', { name: /^Inicio$/i }));
     expect(screen.getByText('Buen día, Paciente')).toBeInTheDocument();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// TTS error handling
+// ---------------------------------------------------------------------------
+describe('TTS error handling', () => {
+  it('shows error banner when TTS fails and can be dismissed', async () => {
+    const user = userEvent.setup();
+    render(
+      <PatientProvider>
+        <TTSSpeakerProvider provider={new RejectingTTSProvider()}>
+          <MainApp />
+        </TTSSpeakerProvider>
+      </PatientProvider>,
+    );
+
+    // Click emergency button to trigger TTS
+    const btn = screen
+      .getAllByRole('button')
+      .find((b) =>
+        b.textContent?.includes('Llamado de Asistencia'),
+      ) as HTMLButtonElement;
+    await user.click(btn);
+
+    // Error banner should appear
+    const alert = await screen.findByRole('alert');
+    expect(alert).toHaveTextContent('No se pudo reproducir la frase.');
+
+    // Dismiss button should clear the banner
+    const dismissBtn = screen.getByRole('button', { name: /Cerrar error/i });
+    await user.click(dismissBtn);
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 });

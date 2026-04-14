@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { X } from 'lucide-react';
 import BottomNav from './components/layout/BottomNav';
 import type { TabId } from './components/layout/BottomNav';
 import { useTTS } from './lib/tts/TTSContext';
@@ -14,7 +15,7 @@ import ProfileScreen from './screens/ProfileScreen';
 import PreopVoiceBankScreen from './screens/PreopVoiceBankScreen';
 import type { CategoryId } from './types';
 
-function MainApp() {
+export function MainApp() {
   const { currentScreen, navigate, goBack, resetTo, navigationParams } =
     useNavigation();
   const { favorites, isFavorite, toggleFavorite } = useFavorites();
@@ -39,7 +40,7 @@ function MainApp() {
     try {
       await speak(phraseText || 'Necesito ayuda');
     } catch {
-      setTtsError('No se pudo reproducir la frase. Toca para reintentar.');
+      setTtsError('No se pudo reproducir la frase.');
     } finally {
       setPlayingId(null);
     }
@@ -87,10 +88,10 @@ function MainApp() {
           <button
             type="button"
             onClick={() => setTtsError(null)}
-            className="ml-3 text-red-500 hover:text-red-700 font-medium text-xs"
+            className="ml-3 text-red-500 hover:text-red-700"
             aria-label="Cerrar error"
           >
-            ✕
+            <X className="w-4 h-4" />
           </button>
         </div>
       )}

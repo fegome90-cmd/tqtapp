@@ -185,6 +185,50 @@ describe('CustomPhrasesRepository', () => {
     const parsed = JSON.parse(raw!);
     expect(parsed._version).toBe(1);
   });
+
+  describe('create() validation', () => {
+    it('throws on whitespace-only text', () => {
+      expect(() =>
+        CustomPhrasesRepository.create({
+          text: '   ',
+          categoryId: 'urgency',
+          isCustom: true,
+        }),
+      ).toThrow('Phrase text cannot be empty');
+    });
+
+    it('throws on text exceeding 500 characters', () => {
+      const longText = 'a'.repeat(501);
+      expect(() =>
+        CustomPhrasesRepository.create({
+          text: longText,
+          categoryId: 'urgency',
+          isCustom: true,
+        }),
+      ).toThrow('Phrase text cannot exceed 500 characters');
+    });
+
+    it('trims input text before persisting', () => {
+      const phrase = CustomPhrasesRepository.create({
+        text: '  hello world  ',
+        categoryId: 'urgency',
+        isCustom: true,
+      });
+      expect(phrase.text).toBe('hello world');
+      CustomPhrasesRepository.delete(phrase.id);
+    });
+
+    it('accepts text at exactly 500 characters', () => {
+      const text = 'a'.repeat(500);
+      const phrase = CustomPhrasesRepository.create({
+        text,
+        categoryId: 'urgency',
+        isCustom: true,
+      });
+      expect(phrase.text).toBe(text);
+      CustomPhrasesRepository.delete(phrase.id);
+    });
+  });
 });
 
 // ---------------------------------------------------------------------------
