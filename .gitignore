@@ -2,7 +2,31 @@ node_modules/
 build/
 dist/
 coverage/
+.atl/
+_ctx/
+.vite/
+.cache/
+test-results/
+
+# Logs
 .DS_Store
 *.log
+
+# Environment files
 .env*
 !.env.example
+*.auth-state.json
+
+# TypeScript
+*.tsbuildinfo
+
+# Package manager caches
+.npm/
+.pnpm-store/
+
+# IDE/editor
+.vscode/
+.idea/
+
+# OS
+Thumbs.db

@@ -1,0 +1,6 @@
+{
+  "args": "--no-sandbox,--disable-dev-shm-usage,--disable-gpu",
+  "contentBoundaries": true,
+  "maxOutput": 20000,
+  "screenshotDir": "./test-results/agent-browser"
+}

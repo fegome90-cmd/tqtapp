@@ -1,0 +1,211 @@
+import { describe, expect, it, beforeEach, vi } from 'vitest';
+import { FavoritesRepository } from '../lib/persistence/FavoritesRepository';
+import { CustomPhrasesRepository } from '../lib/persistence/CustomPhrasesRepository';
+
+// Mock localStorage for controlled tests
+const localStorageMock = (() => {
+  let store: Record<string, string> = {};
+  return {
+    getItem: vi.fn((key: string) => store[key] ?? null),
+    setItem: vi.fn((key: string, value: string) => {
+      store[key] = value;
+    }),
+    removeItem: vi.fn((key: string) => {
+      delete store[key];
+    }),
+    clear: vi.fn(() => {
+      store = {};
+    }),
+    get length() {
+      return Object.keys(store).length;
+    },
+    key: vi.fn((_index: number) => null),
+  };
+})();
+
+Object.defineProperty(globalThis, 'localStorage', { value: localStorageMock });
+
+beforeEach(() => {
+  localStorageMock.clear();
+  vi.clearAllMocks();
+});
+
+// ---------------------------------------------------------------------------
+// SC-LS-1: Persist favorites across reloads
+// ---------------------------------------------------------------------------
+describe('FavoritesRepository', () => {
+  it('persists favorites across instances (SC-LS-1)', () => {
+    FavoritesRepository.addFavorite('urg-1');
+
+    // New instance reads from same localStorage
+    const result = FavoritesRepository.getFavorites();
+    expect(result).toContain('urg-1');
+  });
+
+  it('adds and checks favorites', () => {
+    FavoritesRepository.addFavorite('dol-1');
+    expect(FavoritesRepository.isFavorite('dol-1')).toBe(true);
+    expect(FavoritesRepository.isFavorite('dol-2')).toBe(false);
+  });
+
+  it('removes favorites', () => {
+    FavoritesRepository.addFavorite('urg-1');
+    FavoritesRepository.removeFavorite('urg-1');
+    expect(FavoritesRepository.isFavorite('urg-1')).toBe(false);
+    expect(FavoritesRepository.getFavorites()).not.toContain('urg-1');
+  });
+
+  it('does not add duplicate favorites', () => {
+    FavoritesRepository.addFavorite('urg-1');
+    FavoritesRepository.addFavorite('urg-1');
+    expect(
+      FavoritesRepository.getFavorites().filter((id) => id === 'urg-1'),
+    ).toHaveLength(1);
+  });
+
+  it('uses tqt-favorites storage key (SC-LS-7)', () => {
+    FavoritesRepository.addFavorite('urg-1');
+    expect(localStorageMock.setItem).toHaveBeenCalledWith(
+      'tqt-favorites',
+      expect.any(String),
+    );
+  });
+
+  it('includes _version field in stored data (SC-LS-6)', () => {
+    FavoritesRepository.addFavorite('urg-1');
+    const storedCall = localStorageMock.setItem.mock.calls.find(
+      (call: [string, string]) => call[0] === 'tqt-favorites',
+    );
+    if (!storedCall) throw new Error('storedCall not found');
+    const parsed = JSON.parse(storedCall[1] ?? '');
+    expect(parsed._version).toBe(1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// SC-LS-4 & SC-LS-5: CustomPhrasesRepository
+// ---------------------------------------------------------------------------
+describe('CustomPhrasesRepository', () => {
+  it('creates a custom phrase with auto-ID (SC-LS-4)', () => {
+    const phrase = CustomPhrasesRepository.create({
+      text: 'Necesito mi cánula',
+      categoryId: 'respiracion',
+      isCustom: true,
+    });
+
+    expect(phrase.id.startsWith('custom_')).toBe(true);
+    expect(phrase.text).toBe('Necesito mi cánula');
+    expect(phrase.categoryId).toBe('respiracion');
+    expect(phrase.isCustom).toBe(true);
+    expect(phrase.createdAt).toBeDefined();
+  });
+
+  it('getAll returns all created phrases', () => {
+    CustomPhrasesRepository.create({
+      text: 'Phrase 1',
+      categoryId: 'dolor',
+      isCustom: true,
+    });
+    CustomPhrasesRepository.create({
+      text: 'Phrase 2',
+      categoryId: 'emociones',
+      isCustom: true,
+    });
+
+    const all = CustomPhrasesRepository.getAll();
+    expect(all.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('getById finds a phrase by ID', () => {
+    const created = CustomPhrasesRepository.create({
+      text: 'Find me',
+      categoryId: 'dolor',
+      isCustom: true,
+    });
+
+    const found = CustomPhrasesRepository.getById(created.id);
+    expect(found).toBeDefined();
+    // Biome rule noNonNullAssertion: use optional chain
+    expect(found?.text).toBe('Find me');
+  });
+
+  it('getById returns undefined for missing ID', () => {
+    expect(CustomPhrasesRepository.getById('nonexistent')).toBeUndefined();
+  });
+
+  it('updates phrase text', () => {
+    const created = CustomPhrasesRepository.create({
+      text: 'Original',
+      categoryId: 'dolor',
+      isCustom: true,
+    });
+
+    const updated = CustomPhrasesRepository.update(created.id, 'Updated');
+    expect(updated.text).toBe('Updated');
+    expect(updated.id).toBe(created.id);
+  });
+
+  it('deletes a custom phrase (SC-LS-5)', () => {
+    const created = CustomPhrasesRepository.create({
+      text: 'Delete me',
+      categoryId: 'dolor',
+      isCustom: true,
+    });
+
+    CustomPhrasesRepository.delete(created.id);
+    expect(CustomPhrasesRepository.getById(created.id)).toBeUndefined();
+  });
+
+  it('uses tqt-custom-phrases storage key (SC-LS-7)', () => {
+    CustomPhrasesRepository.create({
+      text: 'Test',
+      categoryId: 'dolor',
+      isCustom: true,
+    });
+    expect(localStorageMock.setItem).toHaveBeenCalledWith(
+      'tqt-custom-phrases',
+      expect.any(String),
+    );
+  });
+
+  it('includes _version field in stored data (SC-LS-6)', () => {
+    CustomPhrasesRepository.create({
+      text: 'Test',
+      categoryId: 'dolor',
+      isCustom: true,
+    });
+    const storedCall = localStorageMock.setItem.mock.calls.find(
+      (call: [string, string]) => call[0] === 'tqt-custom-phrases',
+    );
+    if (!storedCall) throw new Error('storedCall not found');
+    const parsed = JSON.parse(storedCall[1] ?? '');
+    expect(parsed._version).toBe(1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// SC-LS-2 & SC-LS-3: useLocalStorage error handling
+// ---------------------------------------------------------------------------
+describe('localStorage error handling', () => {
+  it('handles corrupt JSON gracefully (SC-LS-3)', () => {
+    localStorageMock.getItem.mockReturnValueOnce('{invalid json');
+    const result = FavoritesRepository.getFavorites();
+    expect(result).toEqual([]);
+  });
+
+  it('handles unavailable localStorage (SC-LS-2)', () => {
+    localStorageMock.getItem.mockImplementationOnce(() => {
+      throw new Error('localStorage not available');
+    });
+    const result = FavoritesRepository.getFavorites();
+    expect(result).toEqual([]);
+  });
+
+  it('handles write errors gracefully', () => {
+    localStorageMock.setItem.mockImplementationOnce(() => {
+      throw new Error('QuotaExceededError');
+    });
+    // Should not throw
+    expect(() => FavoritesRepository.addFavorite('urg-1')).not.toThrow();
+  });
+});
