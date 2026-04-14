@@ -15,8 +15,7 @@ interface CategoryCardProps {
   icon: string;
   title: string;
   description: string;
-  iconBgColor: string;
-  iconColor: string;
+  colorClasses: string;
   onClick: () => void;
 }
 
@@ -37,8 +36,7 @@ export default function CategoryCard({
   icon,
   title,
   description,
-  iconBgColor,
-  iconColor,
+  colorClasses,
   onClick,
 }: CategoryCardProps) {
   const IconComponent = iconMap[icon] || iconMap.Heart;
@@ -47,10 +45,10 @@ export default function CategoryCard({
     <button
       type="button"
       onClick={onClick}
-      className="w-full p-4 bg-white rounded-2xl border border-slate-200/60 hover:border-slate-300 hover:bg-white/80 transition-all active:scale-[0.98] flex items-center gap-4 text-left"
+      className={`w-full p-4 bg-white rounded-2xl hover:bg-white/80 transition-all active:scale-[0.98] flex items-center gap-4 text-left ${colorClasses}`}
     >
       <div
-        className={`w-14 h-14 rounded-2xl flex items-center justify-center ${iconBgColor} ${iconColor}`}
+        className={`w-14 h-14 rounded-2xl flex items-center justify-center ${colorClasses}`}
       >
         <IconComponent className="w-7 h-7" />
       </div>

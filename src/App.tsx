@@ -19,6 +19,7 @@ function MainApp() {
     useNavigation();
   const { favorites, isFavorite, toggleFavorite } = useFavorites();
   const [playingId, setPlayingId] = useState<string | null>(null);
+  const [ttsError, setTtsError] = useState<string | null>(null);
   const { speak, isSpeaking } = useTTS();
   const [announcement, setAnnouncement] = useState('');
   const prevSpeakingRef = useRef(false);
@@ -34,10 +35,11 @@ function MainApp() {
 
   const handlePlay = async (id: string, phraseText?: string) => {
     setPlayingId(id);
+    setTtsError(null);
     try {
       await speak(phraseText || 'Necesito ayuda');
     } catch {
-      // Silently handle TTS errors
+      setTtsError('No se pudo reproducir la frase. Toca para reintentar.');
     } finally {
       setPlayingId(null);
     }
@@ -76,6 +78,22 @@ function MainApp() {
       <div aria-live="polite" aria-atomic="true" className="sr-only">
         {announcement}
       </div>
+      {ttsError && (
+        <div
+          role="alert"
+          className="mx-4 mt-2 px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm flex items-center justify-between"
+        >
+          <span>{ttsError}</span>
+          <button
+            type="button"
+            onClick={() => setTtsError(null)}
+            className="ml-3 text-red-500 hover:text-red-700 font-medium text-xs"
+            aria-label="Cerrar error"
+          >
+            ✕
+          </button>
+        </div>
+      )}
       <main className="flex-1 overflow-y-auto pb-24 relative">
         {currentScreen === 'home' && (
           <HomeScreen

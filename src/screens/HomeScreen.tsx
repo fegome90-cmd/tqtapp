@@ -26,15 +26,13 @@ export default function HomeScreen({
           </h2>
           <div className="grid grid-cols-2 gap-4">
             {CATEGORIES.map((cat) => {
-              const [bgColor, textColor] = (cat.color || '').split(' ');
               return (
                 <CategoryCard
                   key={cat.id}
                   icon={cat.icon}
                   title={cat.title}
                   description={cat.description || ''}
-                  iconBgColor={bgColor}
-                  iconColor={textColor}
+                  colorClasses={cat.color || ''}
                   onClick={() => onCategorySelect(cat.id)}
                 />
               );

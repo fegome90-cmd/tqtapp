@@ -46,9 +46,17 @@ export const CustomPhrasesRepository = {
   },
 
   create(phrase: Omit<CustomPhrase, 'id' | 'createdAt'>): CustomPhrase {
+    const text = phrase.text.trim();
+    if (text.length === 0) {
+      throw new Error('Phrase text cannot be empty');
+    }
+    if (text.length > 500) {
+      throw new Error('Phrase text cannot exceed 500 characters');
+    }
     const newPhrase: CustomPhrase = {
       ...phrase,
-      id: `custom_${Date.now()}`,
+      text,
+      id: `custom_${crypto.randomUUID()}`,
       createdAt: new Date().toISOString(),
     };
     const data = read();

@@ -81,15 +81,9 @@ export function TTSSpeakerProvider({
 
 export function useTTS() {
   const context = useContext(TTSContext);
-
   if (!context) {
-    return {
-      speak: async (_text: string, _config?: TTSConfig) => {},
-      stop: () => {},
-      isSpeaking: false,
-    };
+    throw new Error('useTTS must be used within a TTSSpeakerProvider');
   }
-
   return context;
 }
 
