@@ -16,5 +16,7 @@ afterEach(() => {
   // Clear any pending timers from TTS or handlePlay
   vi.clearAllTimers();
   // Clear localStorage to prevent state bleeding between tests
-  localStorage.clear();
+  if (typeof localStorage !== 'undefined' && typeof localStorage.clear === 'function') {
+    localStorage.clear();
+  }
 });

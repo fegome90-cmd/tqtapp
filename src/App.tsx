@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import BottomNav from './components/layout/BottomNav';
 import type { TabId } from './components/layout/BottomNav';
 import { useTTS } from './lib/tts/TTSContext';
@@ -19,7 +19,18 @@ function MainApp() {
     useNavigation();
   const { favorites, isFavorite, toggleFavorite } = useFavorites();
   const [playingId, setPlayingId] = useState<string | null>(null);
-  const { speak } = useTTS();
+  const { speak, isSpeaking } = useTTS();
+  const [announcement, setAnnouncement] = useState('');
+  const prevSpeakingRef = useRef(false);
+
+  useEffect(() => {
+    if (isSpeaking && !prevSpeakingRef.current) {
+      setAnnouncement('Reproduciendo...');
+    } else if (!isSpeaking && prevSpeakingRef.current) {
+      setAnnouncement('Frase completada');
+    }
+    prevSpeakingRef.current = isSpeaking;
+  }, [isSpeaking]);
 
   const handlePlay = async (id: string, phraseText?: string) => {
     setPlayingId(id);
@@ -28,7 +39,7 @@ function MainApp() {
     } catch {
       // Silently handle TTS errors
     } finally {
-      setTimeout(() => setPlayingId(null), 1500);
+      setPlayingId(null);
     }
   };
 
@@ -62,6 +73,9 @@ function MainApp() {
 
   return (
     <div className="w-full max-w-2xl mx-auto h-screen sm:h-[95vh] sm:mt-[2.5vh] sm:rounded-[2.5rem] bg-slate-50 flex flex-col font-sans relative sm:shadow-2xl overflow-hidden sm:border-[3px] sm:border-slate-300">
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        {announcement}
+      </div>
       <main className="flex-1 overflow-y-auto pb-24 relative">
         {currentScreen === 'home' && (
           <HomeScreen

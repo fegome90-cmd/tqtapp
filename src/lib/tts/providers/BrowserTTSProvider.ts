@@ -15,38 +15,47 @@ export class BrowserTTSProvider implements TTSProvider {
     this.stop();
 
     return new Promise<void>((resolve, reject) => {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'es-ES';
+      try {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'es-ES';
 
-      if (config?.rate !== undefined) {
-        utterance.rate = config.rate;
-      }
-      if (config?.pitch !== undefined) {
-        utterance.pitch = config.pitch;
-      }
-      if (config?.voice) {
-        const voices = window.speechSynthesis.getVoices();
-        const match = voices.find((v) =>
-          v.name.includes(config.voice as string),
-        );
-        if (match) {
-          utterance.voice = match;
+        if (config?.rate !== undefined) {
+          utterance.rate = config.rate;
         }
+        if (config?.pitch !== undefined) {
+          utterance.pitch = config.pitch;
+        }
+        if (config?.voice) {
+          const voices = window.speechSynthesis.getVoices();
+          const match = voices.find((v) =>
+            v.name.includes(config.voice as string),
+          );
+          if (match) {
+            utterance.voice = match;
+          }
+        }
+
+        this.speaking = true;
+
+        utterance.onend = () => {
+          this.speaking = false;
+          resolve();
+        };
+
+        utterance.onerror = (event) => {
+          this.speaking = false;
+          reject(new Error(`Speech synthesis error: ${event.error}`));
+        };
+
+        window.speechSynthesis.speak(utterance);
+      } catch (error) {
+        this.speaking = false;
+        reject(
+          new Error(
+            `Failed to initialize speech synthesis: ${error instanceof Error ? error.message : String(error)}`,
+          ),
+        );
       }
-
-      this.speaking = true;
-
-      utterance.onend = () => {
-        this.speaking = false;
-        resolve();
-      };
-
-      utterance.onerror = (event) => {
-        this.speaking = false;
-        reject(new Error(`Speech synthesis error: ${event.error}`));
-      };
-
-      window.speechSynthesis.speak(utterance);
     });
   }
 

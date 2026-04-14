@@ -1,4 +1,4 @@
-import { ChevronLeft, Volume2 } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 
 interface TopBarProps {
   title: string;
@@ -27,13 +27,6 @@ export default function TopBar({ title, showBack, onBack }: TopBarProps) {
           {title}
         </h1>
       </div>
-      <button
-        type="button"
-        className="w-10 h-10 rounded-full bg-slate-50 hover:bg-slate-100 active:bg-slate-200 flex items-center justify-center border border-slate-200/60 transition-colors"
-        aria-label="Volumen"
-      >
-        <Volume2 className="w-5 h-5 text-slate-400" aria-hidden="true" />
-      </button>
     </header>
   );
 }

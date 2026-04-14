@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Mic, Volume2 } from 'lucide-react';
 import TopBar from '../components/layout/TopBar';
 import { usePatient } from '../hooks/usePatient';
@@ -32,6 +33,7 @@ export default function ProfileScreen({
   voiceBankSession = DEFAULT_SESSION,
 }: ProfileScreenProps) {
   const { initials, displayName, carePhase } = usePatient();
+  const [volumeEnabled, setVolumeEnabled] = useState(true);
   const phaseLabel = CARE_PHASE_LABELS[carePhase] || carePhase;
   const session = voiceBankSession;
 
@@ -58,15 +60,21 @@ export default function ProfileScreen({
             Accesibilidad
           </h3>
           <div className="bg-white rounded-3xl border border-slate-200/60 overflow-hidden divide-y divide-slate-100">
-            <div className="p-5 flex items-center justify-between active:bg-slate-50 cursor-pointer">
+            <button
+              type="button"
+              className="p-5 flex items-center justify-between active:bg-slate-50 cursor-pointer w-full"
+              onClick={() => setVolumeEnabled(!volumeEnabled)}
+            >
               <div className="flex items-center gap-4 text-slate-800">
                 <Volume2 className="w-6 h-6" aria-hidden="true" />
                 <span className="font-semibold text-lg">Volumen de Voz</span>
               </div>
-              <div className="w-14 h-8 bg-blue-600 rounded-full flex items-center px-1 justify-end">
+              <div
+                className={`w-14 h-8 ${volumeEnabled ? 'bg-blue-600' : 'bg-slate-300'} rounded-full flex items-center px-1 ${volumeEnabled ? 'justify-end' : 'justify-start'}`}
+              >
                 <div className="w-6 h-6 bg-white rounded-full shadow-sm" />
               </div>
-            </div>
+            </button>
           </div>
         </div>
 

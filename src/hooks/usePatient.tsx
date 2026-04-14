@@ -31,8 +31,7 @@ export function PatientProvider({
   patient = DEFAULT_PATIENT,
 }: PatientProviderProps) {
   const value = useMemo<PatientContextValue>(() => {
-    const initials =
-      patient.firstName.charAt(0) + patient.lastName.charAt(0);
+    const initials = patient.firstName.charAt(0) + patient.lastName.charAt(0);
     const displayName = `${patient.firstName} ${patient.lastName}`;
     return {
       patient,
@@ -50,16 +49,7 @@ export function PatientProvider({
 export function usePatient(): PatientContextValue {
   const context = useContext(PatientContext);
   if (!context) {
-    // Fallback for tests or missing provider
-    const initials =
-      DEFAULT_PATIENT.firstName.charAt(0) +
-      DEFAULT_PATIENT.lastName.charAt(0);
-    return {
-      patient: DEFAULT_PATIENT,
-      carePhase: DEFAULT_PATIENT.carePhase,
-      initials,
-      displayName: `${DEFAULT_PATIENT.firstName} ${DEFAULT_PATIENT.lastName}`,
-    };
+    throw new Error('usePatient must be used within a PatientProvider');
   }
   return context;
 }

@@ -1,7 +1,6 @@
 import type React from 'react';
 
 interface PhraseCardProps {
-  key?: React.Key;
   text: string;
   isPlaying: boolean;
   isFavorite: boolean;

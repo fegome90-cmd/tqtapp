@@ -1,33 +1,43 @@
-import { describe, expect, it, beforeEach, vi } from 'vitest';
+import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
 import { FavoritesRepository } from '../lib/persistence/FavoritesRepository';
 import { CustomPhrasesRepository } from '../lib/persistence/CustomPhrasesRepository';
 
-// Mock localStorage for controlled tests
-const localStorageMock = (() => {
-  let store: Record<string, string> = {};
+// Node 25 provides a bare localStorage object without methods.
+// Provide a working in-memory implementation scoped to this file.
+const originalLocalStorage = globalThis.localStorage;
+let store: Record<string, string> = {};
+
+function createLocalStorage() {
+  store = {};
   return {
-    getItem: vi.fn((key: string) => store[key] ?? null),
-    setItem: vi.fn((key: string, value: string) => {
-      store[key] = value;
-    }),
-    removeItem: vi.fn((key: string) => {
+    getItem(key: string) {
+      return key in store ? store[key] : null;
+    },
+    setItem(key: string, value: string) {
+      store[key] = String(value);
+    },
+    removeItem(key: string) {
       delete store[key];
-    }),
-    clear: vi.fn(() => {
+    },
+    clear() {
       store = {};
-    }),
+    },
     get length() {
       return Object.keys(store).length;
     },
-    key: vi.fn((_index: number) => null),
+    key(_index: number) {
+      return null;
+    },
   };
-})();
-
-Object.defineProperty(globalThis, 'localStorage', { value: localStorageMock });
+}
 
 beforeEach(() => {
-  localStorageMock.clear();
+  globalThis.localStorage = createLocalStorage() as Storage;
   vi.clearAllMocks();
+});
+
+afterEach(() => {
+  globalThis.localStorage = originalLocalStorage;
 });
 
 // ---------------------------------------------------------------------------
@@ -64,20 +74,17 @@ describe('FavoritesRepository', () => {
   });
 
   it('uses tqt-favorites storage key (SC-LS-7)', () => {
+    const spy = vi.spyOn(localStorage, 'setItem');
     FavoritesRepository.addFavorite('urg-1');
-    expect(localStorageMock.setItem).toHaveBeenCalledWith(
-      'tqt-favorites',
-      expect.any(String),
-    );
+    expect(spy).toHaveBeenCalledWith('tqt-favorites', expect.any(String));
+    spy.mockRestore();
   });
 
   it('includes _version field in stored data (SC-LS-6)', () => {
     FavoritesRepository.addFavorite('urg-1');
-    const storedCall = localStorageMock.setItem.mock.calls.find(
-      (call: [string, string]) => call[0] === 'tqt-favorites',
-    );
-    if (!storedCall) throw new Error('storedCall not found');
-    const parsed = JSON.parse(storedCall[1] ?? '');
+    const raw = localStorage.getItem('tqt-favorites');
+    expect(raw).not.toBeNull();
+    const parsed = JSON.parse(raw!);
     expect(parsed._version).toBe(1);
   });
 });
@@ -157,15 +164,14 @@ describe('CustomPhrasesRepository', () => {
   });
 
   it('uses tqt-custom-phrases storage key (SC-LS-7)', () => {
+    const spy = vi.spyOn(localStorage, 'setItem');
     CustomPhrasesRepository.create({
       text: 'Test',
       categoryId: 'dolor',
       isCustom: true,
     });
-    expect(localStorageMock.setItem).toHaveBeenCalledWith(
-      'tqt-custom-phrases',
-      expect.any(String),
-    );
+    expect(spy).toHaveBeenCalledWith('tqt-custom-phrases', expect.any(String));
+    spy.mockRestore();
   });
 
   it('includes _version field in stored data (SC-LS-6)', () => {
@@ -174,11 +180,9 @@ describe('CustomPhrasesRepository', () => {
       categoryId: 'dolor',
       isCustom: true,
     });
-    const storedCall = localStorageMock.setItem.mock.calls.find(
-      (call: [string, string]) => call[0] === 'tqt-custom-phrases',
-    );
-    if (!storedCall) throw new Error('storedCall not found');
-    const parsed = JSON.parse(storedCall[1] ?? '');
+    const raw = localStorage.getItem('tqt-custom-phrases');
+    expect(raw).not.toBeNull();
+    const parsed = JSON.parse(raw!);
     expect(parsed._version).toBe(1);
   });
 });
@@ -188,13 +192,13 @@ describe('CustomPhrasesRepository', () => {
 // ---------------------------------------------------------------------------
 describe('localStorage error handling', () => {
   it('handles corrupt JSON gracefully (SC-LS-3)', () => {
-    localStorageMock.getItem.mockReturnValueOnce('{invalid json');
+    vi.spyOn(localStorage, 'getItem').mockReturnValueOnce('{invalid json');
     const result = FavoritesRepository.getFavorites();
     expect(result).toEqual([]);
   });
 
   it('handles unavailable localStorage (SC-LS-2)', () => {
-    localStorageMock.getItem.mockImplementationOnce(() => {
+    vi.spyOn(localStorage, 'getItem').mockImplementationOnce(() => {
       throw new Error('localStorage not available');
     });
     const result = FavoritesRepository.getFavorites();
@@ -202,10 +206,9 @@ describe('localStorage error handling', () => {
   });
 
   it('handles write errors gracefully', () => {
-    localStorageMock.setItem.mockImplementationOnce(() => {
+    vi.spyOn(localStorage, 'setItem').mockImplementationOnce(() => {
       throw new Error('QuotaExceededError');
     });
-    // Should not throw
     expect(() => FavoritesRepository.addFavorite('urg-1')).not.toThrow();
   });
 });

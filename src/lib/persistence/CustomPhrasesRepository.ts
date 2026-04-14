@@ -16,7 +16,11 @@ function read(): CustomPhrasesData {
       return { _version: 1, phrases: [] };
     }
     return parsed;
-  } catch {
+  } catch (error) {
+    console.error(
+      '[CustomPhrasesRepository] Failed to read from localStorage:',
+      error,
+    );
     return { _version: 1, phrases: [] };
   }
 }
@@ -24,8 +28,11 @@ function read(): CustomPhrasesData {
 function write(data: CustomPhrasesData): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  } catch {
-    // localStorage unavailable or quota exceeded
+  } catch (error) {
+    console.error(
+      '[CustomPhrasesRepository] Failed to write to localStorage:',
+      error,
+    );
   }
 }
 

@@ -10,17 +10,17 @@ export type CategoryId =
   | 'gratitud';
 
 export interface Category {
-  id: CategoryId;
-  title: string;
-  icon: string;
-  color: string;
-  description?: string;
+  readonly id: CategoryId;
+  readonly title: string;
+  readonly icon: string;
+  readonly color: string;
+  readonly description?: string;
 }
 
 export interface Phrase {
-  id: string;
-  text: string;
-  categoryId: CategoryId;
+  readonly id: string;
+  readonly text: string;
+  readonly categoryId: CategoryId;
 }
 
 // --- Domain types for MVP Laringectomía Total ---
@@ -33,36 +33,36 @@ export type CarePhase =
   | 'follow-up';
 
 export interface PatientProfile {
-  id: string;
-  firstName: string;
-  lastName: string;
-  diagnosis: string;
-  surgeryDate: string | null; // ISO 8601 or null
-  carePhase: CarePhase;
-  createdAt: string; // ISO 8601
+  readonly id: string;
+  readonly firstName: string;
+  readonly lastName: string;
+  readonly diagnosis: string;
+  readonly surgeryDate: string | null; // ISO 8601 or null
+  readonly carePhase: CarePhase;
+  readonly createdAt: string; // ISO 8601
 }
 
 export interface ConsentRecord {
-  id: string;
-  patientId: string;
-  type: string;
-  grantedAt: string | null; // ISO 8601 or null
-  version: string;
+  readonly id: string;
+  readonly patientId: string;
+  readonly type: string;
+  readonly grantedAt: string | null; // ISO 8601 or null
+  readonly version: string;
 }
 
 export interface PhraseTemplate extends Phrase {
-  isCustom: false;
-  carePhase: CarePhase[];
-  isEmergency: boolean;
-  sortOrder: number;
+  readonly isCustom: false;
+  readonly carePhase: CarePhase[];
+  readonly isEmergency: boolean;
+  readonly sortOrder: number;
 }
 
 export interface CustomPhrase {
-  id: string; // prefixed with "custom_"
-  text: string;
-  categoryId: CategoryId;
-  isCustom: true;
-  createdAt: string; // ISO 8601
+  readonly id: string; // prefixed with "custom_"
+  readonly text: string;
+  readonly categoryId: CategoryId;
+  readonly isCustom: true;
+  readonly createdAt: string; // ISO 8601
 }
 
 export type AnyPhrase = PhraseTemplate | CustomPhrase;
@@ -73,13 +73,13 @@ export type VoiceBankSessionStatus =
   | 'completed';
 
 export interface VoiceBankSession {
-  id: string;
-  patientId: string;
-  status: VoiceBankSessionStatus;
-  recordedSamples: number;
-  totalSamples: number;
-  startedAt: string | null; // ISO 8601 or null
-  completedAt: string | null; // ISO 8601 or null
+  readonly id: string;
+  readonly patientId: string;
+  readonly status: VoiceBankSessionStatus;
+  readonly recordedSamples: number;
+  readonly totalSamples: number;
+  readonly startedAt: string | null; // ISO 8601 or null
+  readonly completedAt: string | null; // ISO 8601 or null
 }
 
 export interface VoiceBankService {

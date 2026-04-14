@@ -14,7 +14,11 @@ function read(): FavoritesData {
       return { _version: 1, ids: [] };
     }
     return parsed;
-  } catch {
+  } catch (error) {
+    console.error(
+      '[FavoritesRepository] Failed to read from localStorage:',
+      error,
+    );
     return { _version: 1, ids: [] };
   }
 }
@@ -22,8 +26,11 @@ function read(): FavoritesData {
 function write(data: FavoritesData): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  } catch {
-    // localStorage unavailable or quota exceeded
+  } catch (error) {
+    console.error(
+      '[FavoritesRepository] Failed to write to localStorage:',
+      error,
+    );
   }
 }
 
