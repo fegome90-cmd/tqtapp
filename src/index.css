@@ -1,22 +1,148 @@
 @import "tailwindcss";
 
 :root {
-  --surface-0: #f8f9fa;
-  --surface-1: #ffffff;
-  --surface-2: #f1f5f9;
-  --border-default: rgba(0, 0, 0, 0.08);
-  --border-subtle: rgba(0, 0, 0, 0.04);
-  --border-strong: rgba(0, 0, 0, 0.15);
-  --text-primary: #1e293b;
-  --text-secondary: #475569;
-  --text-tertiary: #94a3b8;
-  --text-muted: #cbd5e1;
+  /* ===== Colors — Surfaces ===== */
+  --color-surface: #f8f9fa;
+  --color-card: #ffffff;
+  --color-card-elevated: #ffffff;
+
+  /* ===== Colors — Brand ===== */
+  --color-primary: #002d60;
+  --color-primary-action: #014389;
+  --color-primary-light: #aac7ff;
+
+  /* ===== Colors — Text ===== */
+  --color-text-heading: #191c1d;
+  --color-text-body: #191c1d;
+  --color-text-secondary: #424751;
+  --color-text-muted: #64748b;
+  --color-text-on-action: #ffffff;
+
+  /* ===== Colors — Borders ===== */
+  --color-border: rgba(0, 0, 0, 0.08);
+  --color-border-subtle: rgba(0, 0, 0, 0.04);
+  --color-border-focus: var(--color-primary);
+
+  /* ===== Colors — Semantic ===== */
+  --color-error: #ba1a1a;
+  --color-error-bg: #ffdad6;
+
+  /* ===== Colors — Glass ===== */
+  --color-glass: rgba(255, 255, 255, 0.9);
+  --color-glass-border: rgba(255, 255, 255, 0.5);
+
+  /* ===== Typography ===== */
+  --font-family: "Nunito", sans-serif;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-black: 900;
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-snug: 1.375;
+
+  /* ===== Spacing (4px base) ===== */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  /* ===== Touch Targets ===== */
+  --touch-min: 48px;
+  --touch-medical: 56px;
+
+  /* ===== Border Radius ===== */
+  --radius-sm: 0.5rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
+  --radius-pill: 2.5rem;
+  --radius-full: 9999px;
+
+  /* ===== Elevation ===== */
+  --elevation-0: none;
+  --elevation-1: 0 8px 20px -6px rgba(0, 0, 0, 0.05);
+  --elevation-2: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+  --elevation-3: 0 20px 40px -12px rgba(1, 67, 137, 0.4);
+
+  /* ===== Motion ===== */
+  --scale-press: 0.95;
+  --scale-press-sm: 0.9;
+  --scale-hover: 1.1;
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+  --ease-out: cubic-bezier(0.25, 1, 0.5, 1);
+
+  /* ===== Glass ===== */
+  --glass-nav: rgba(255, 255, 255, 0.9);
+  --glass-header: rgba(255, 255, 255, 0.8);
+  --glass-blur: 20px;
+  --glass-border: rgba(255, 255, 255, 0.5);
+
+  /* ===== Safe Areas ===== */
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
-  --elevation-0: none;
-  --elevation-1: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-  --elevation-2: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
-  --elevation-3: 0 8px 24px rgba(1, 67, 137, 0.2), 0 4px 8px rgba(0, 0, 0, 0.06);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+
+  /* ===== Category Colors — Urgente ===== */
+  --cat-urgente-bg: #fef2f2;
+  --cat-urgente-text: #dc2626;
+  --cat-urgente-border: #fecaca;
+
+  /* ===== Category Colors — Dolor ===== */
+  --cat-dolor-bg: #fff7ed;
+  --cat-dolor-text: #ea580c;
+  --cat-dolor-border: #fed7aa;
+
+  /* ===== Category Colors — Respiracion ===== */
+  --cat-respiracion-bg: #eff6ff;
+  --cat-respiracion-text: #2563eb;
+  --cat-respiracion-border: #bfdbfe;
+
+  /* ===== Category Colors — Secreciones ===== */
+  --cat-secreciones-bg: #ecfeff;
+  --cat-secreciones-text: #0891b2;
+  --cat-secreciones-border: #a5f3fc;
+
+  /* ===== Category Colors — Posicion ===== */
+  --cat-posicion-bg: #eef2ff;
+  --cat-posicion-text: #4f46e5;
+  --cat-posicion-border: #c7d2fe;
+
+  /* ===== Category Colors — Familia ===== */
+  --cat-familia-bg: #faf5ff;
+  --cat-familia-text: #9333ea;
+  --cat-familia-border: #e9d5ff;
+
+  /* ===== Category Colors — Necesidades ===== */
+  --cat-necesidades-bg: #ecfdf5;
+  --cat-necesidades-text: #059669;
+  --cat-necesidades-border: #a7f3d0;
+
+  /* ===== Category Colors — Emociones ===== */
+  --cat-emociones-bg: #fdf2f8;
+  --cat-emociones-text: #db2777;
+  --cat-emociones-border: #fbcfe8;
+
+  /* ===== Category Colors — Gratitud ===== */
+  --cat-gratitud-bg: #fffbeb;
+  --cat-gratitud-text: #d97706;
+  --cat-gratitud-border: #fde68a;
 }
 
 body {
