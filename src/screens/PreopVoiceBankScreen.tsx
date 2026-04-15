@@ -11,13 +11,13 @@ export default function PreopVoiceBankScreen({
     <div>
       <TopBar title="Banco de Voz" showBack onBack={onBack} />
       <div className="p-5 flex flex-col items-center justify-center py-24">
-        <p className="text-slate-600 text-lg text-center">
+        <p className="text-secondary text-[var(--text-lg)] text-center">
           Esta función estará disponible próximamente.
         </p>
         <button
           type="button"
           onClick={onBack}
-          className="mt-8 px-8 py-3 bg-slate-900 text-white rounded-2xl font-semibold text-lg active:scale-[0.98] transition-all"
+          className="mt-8 px-8 py-3 bg-[var(--color-primary-action)] text-on-action rounded-[var(--radius-md)] font-[var(--weight-semibold)] text-[var(--text-lg)] active:scale-[var(--scale-press)] transition-all"
         >
           Volver
         </button>

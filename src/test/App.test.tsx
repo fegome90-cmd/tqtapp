@@ -102,12 +102,14 @@ describe('Category detail', () => {
     render(<App />);
     await user.click(screen.getByRole('button', { name: /Dolor/ }));
 
-    const phraseBtn = screen.getByText('Tengo dolor').closest('button') as HTMLButtonElement;
+    const phraseBtn = screen
+      .getByText('Tengo dolor')
+      .closest('button') as HTMLButtonElement;
     await user.click(phraseBtn);
 
     // Indicator dot inside the button has the playing class
     const dot = phraseBtn.querySelector('div > div');
-    expect(dot?.className).toContain('bg-primary-container');
+    expect(dot?.className).toContain('bg-primary-action');
   });
 
   it('adds a phrase to favorites', async () => {
@@ -280,10 +282,12 @@ describe('Favorites tab', () => {
 
     await user.click(screen.getByRole('button', { name: /^Favoritos$/i }));
 
-    const phraseBtn = screen.getByText('Tengo dolor').closest('button') as HTMLButtonElement;
+    const phraseBtn = screen
+      .getByText('Tengo dolor')
+      .closest('button') as HTMLButtonElement;
     await user.click(phraseBtn);
     const dot = phraseBtn.querySelector('div > div');
-    expect(dot?.className).toContain('bg-primary-container');
+    expect(dot?.className).toContain('bg-primary-action');
   });
 
   it('removes a phrase from favorites via the star button', async () => {
@@ -300,7 +304,9 @@ describe('Favorites tab', () => {
     await user.click(screen.getByRole('button', { name: /^Favoritos$/i }));
 
     // Find the star button within the favorite phrase card
-    const favCard = screen.getByText('Tengo dolor').closest('div') as HTMLElement;
+    const favCard = screen
+      .getByText('Tengo dolor')
+      .closest('div') as HTMLElement;
     const removeBtn = within(favCard).getByLabelText('Quitar de favoritos');
     await user.click(removeBtn);
 
@@ -321,7 +327,9 @@ describe('Favorites tab', () => {
     await user.click(screen.getByRole('button', { name: /^Favoritos$/i }));
 
     // Remove the favorite via its star button
-    const favCard = screen.getByText('Tengo dolor').closest('div') as HTMLElement;
+    const favCard = screen
+      .getByText('Tengo dolor')
+      .closest('div') as HTMLElement;
     const removeBtn = within(favCard).getByLabelText('Quitar de favoritos');
     await user.click(removeBtn);
 

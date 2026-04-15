@@ -75,20 +75,20 @@ export function MainApp() {
           : 'home';
 
   return (
-    <div className="w-full max-w-2xl mx-auto min-h-dvh sm:min-h-[95vh] sm:mt-[2.5vh] sm:rounded-[2.5rem] bg-slate-50 flex flex-col font-sans relative sm:shadow-2xl overflow-hidden sm:border-[3px] sm:border-slate-300">
+    <div className="w-full max-w-2xl mx-auto min-h-dvh sm:min-h-[95vh] sm:mt-[2.5vh] sm:rounded-[var(--radius-pill)] bg-surface flex flex-col font-sans relative sm:shadow-[var(--elevation-2)] overflow-hidden sm:border-[3px] sm:border-[var(--color-border)]">
       <div aria-live="polite" aria-atomic="true" className="sr-only">
         {announcement}
       </div>
       {ttsError && (
         <div
           role="alert"
-          className="mx-4 mt-2 px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm flex items-center justify-between"
+          className="mx-4 mt-2 px-4 py-3 bg-error-bg border border-[var(--color-error)] rounded-[var(--radius-md)] text-error text-[var(--text-sm)] flex items-center justify-between"
         >
           <span>{ttsError}</span>
           <button
             type="button"
             onClick={() => setTtsError(null)}
-            className="ml-3 text-red-500 hover:text-red-700"
+            className="ml-3 text-error hover:text-[var(--color-error)]"
             aria-label="Cerrar error"
           >
             <X className="w-4 h-4" />

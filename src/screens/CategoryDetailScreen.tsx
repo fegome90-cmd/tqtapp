@@ -41,8 +41,10 @@ export default function CategoryDetailScreen({
           />
         ))}
         {categoryPhrases.length === 0 && (
-          <div className="text-center text-slate-400 py-12">
-            <p className="text-lg font-medium">Categoría en construcción.</p>
+          <div className="text-center text-muted py-12">
+            <p className="text-[var(--text-lg)] font-[var(--weight-medium)]">
+              Categoría en construcción.
+            </p>
           </div>
         )}
       </div>
