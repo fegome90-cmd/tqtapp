@@ -8,22 +8,19 @@ interface TopBarProps {
 
 export default function TopBar({ title, showBack, onBack }: TopBarProps) {
   return (
-    <header className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-slate-200/60 px-5 py-4 flex items-center justify-between">
+    <header className="sticky top-0 z-10 bg-[var(--glass-header)] backdrop-blur-[var(--glass-blur)] border-b border-[var(--color-border)] px-6 py-4 flex items-center justify-between">
       <div className="flex items-center gap-3">
         {showBack && (
           <button
             type="button"
             onClick={onBack}
-            className="p-2 rounded-full hover:bg-slate-100 active:bg-slate-200 transition-colors"
+            className="p-2 rounded-[var(--radius-full)] hover:bg-[var(--color-surface)] active:bg-[var(--color-surface)] transition-colors"
             aria-label="Volver"
           >
-            <ChevronLeft
-              className="w-7 h-7 text-slate-700"
-              aria-hidden="true"
-            />
+            <ChevronLeft className="w-7 h-7 text-heading" aria-hidden="true" />
           </button>
         )}
-        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+        <h1 className="text-[var(--text-xl)] font-[var(--weight-bold)] text-heading">
           {title}
         </h1>
       </div>

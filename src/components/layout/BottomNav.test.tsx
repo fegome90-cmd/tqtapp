@@ -89,8 +89,8 @@ describe('BottomNav', () => {
     const activeButton = getButton(tabLabels.home);
     const inactiveButton = getButton(tabLabels.talk);
 
-    expect(activeButton.className).toContain('bg-primary-container');
-    expect(inactiveButton.className).toContain('text-outline-variant');
+    expect(activeButton.className).toContain('bg-primary-action');
+    expect(inactiveButton.className).toContain('text-secondary');
     expect(activeButton.className).not.toBe(inactiveButton.className);
   });
 

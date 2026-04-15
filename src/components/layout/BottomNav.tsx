@@ -22,7 +22,7 @@ export default function BottomNav({ currentTab, onTabChange }: BottomNavProps) {
       style={{ bottom: 'calc(var(--safe-bottom, 12px) + 12px)' }}
     >
       <nav
-        className="flex justify-around items-center px-1 py-2 bg-white/90 backdrop-blur-xl rounded-2xl border border-white/50 shadow-[var(--elevation-2)]"
+        className="flex justify-around items-center px-1 py-2 bg-[var(--glass-nav)] backdrop-blur-[var(--glass-blur)] rounded-[var(--radius-pill)] border border-[var(--glass-border)] shadow-[var(--elevation-2)]"
         aria-label="Navegación principal"
       >
         {tabs.map((tab) => {
@@ -33,10 +33,10 @@ export default function BottomNav({ currentTab, onTabChange }: BottomNavProps) {
               key={tab.id}
               type="button"
               onClick={() => onTabChange(tab.id)}
-              className={`flex flex-col items-center justify-center px-3 py-1.5 transition-all ${
+              className={`flex flex-col items-center justify-center transition-all ${
                 isActive
-                  ? 'bg-primary-container text-white rounded-xl shadow-lg shadow-primary-container/20 active:scale-95'
-                  : 'text-outline-variant hover:text-primary'
+                  ? 'bg-primary-action text-on-action rounded-[var(--radius-xl)] shadow-[var(--elevation-1)] shadow-[color:var(--color-primary-action)/20] active:scale-[var(--scale-press-sm)]'
+                  : 'text-secondary hover:text-[var(--color-primary)]'
               }`}
               aria-current={isActive ? 'page' : undefined}
             >
@@ -44,7 +44,7 @@ export default function BottomNav({ currentTab, onTabChange }: BottomNavProps) {
                 className={`w-5 h-5 ${isActive ? '[stroke-width:2.5]' : ''}`}
                 aria-hidden="true"
               />
-              <span className="text-[9px] font-black uppercase mt-0.5">
+              <span className="text-[var(--text-xs)] font-[var(--weight-black)] uppercase mt-0.5">
                 {tab.label}
               </span>
             </button>
