@@ -17,7 +17,6 @@ describe('CATEGORIES', () => {
       expect(typeof cat.id).toBe('string');
       expect(typeof cat.title).toBe('string');
       expect(typeof cat.icon).toBe('string');
-      expect(typeof cat.color).toBe('string');
     }
   });
 

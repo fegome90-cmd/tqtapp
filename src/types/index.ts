@@ -13,7 +13,6 @@ export interface Category {
   readonly id: CategoryId;
   readonly title: string;
   readonly icon: string;
-  readonly color: string;
   readonly description?: string;
 }
 
