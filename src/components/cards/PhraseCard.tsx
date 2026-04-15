@@ -62,7 +62,7 @@ export default function PhraseCard({
         type="button"
         onClick={onToggleFav}
         aria-label={isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
-        className="px-4 border-l border-slate-100 flex items-center justify-center hover:bg-slate-50 active:bg-slate-100 transition-colors"
+        className="px-4 border-l border-slate-100 flex items-center justify-center hover:bg-slate-50 active:bg-slate-100 active:scale-[0.95] transition-colors"
       >
         <StarIcon
           className={`w-6 h-6 transition-all ${

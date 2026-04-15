@@ -17,9 +17,12 @@ const tabs: { id: TabId; label: string; icon: LucideIcon }[] = [
 
 export default function BottomNav({ currentTab, onTabChange }: BottomNavProps) {
   return (
-    <div className="fixed bottom-3 left-3 right-3 z-50">
+    <div
+      className="fixed left-3 right-3 z-50"
+      style={{ bottom: 'calc(var(--safe-bottom, 12px) + 12px)' }}
+    >
       <nav
-        className="flex justify-around items-center px-1 py-2 bg-white/90 backdrop-blur-xl rounded-2xl shadow-[0_8px_24px_-8px_rgba(0,0,0,0.08)] border border-white/50"
+        className="flex justify-around items-center px-1 py-2 bg-white/90 backdrop-blur-xl rounded-2xl border border-white/50 shadow-[var(--elevation-2)]"
         aria-label="Navegación principal"
       >
         {tabs.map((tab) => {
