@@ -40,16 +40,19 @@ export default function PhraseCard({
       <button
         type="button"
         onClick={onPlay}
+        aria-label="Reproducir frase"
         className="flex-1 p-4 text-left active:bg-slate-50 transition-colors flex items-center gap-4"
       >
         {/* Indicador visual de reproducción */}
-        <div
-          className={`w-3 h-3 rounded-full transition-all duration-300 ${
-            isPlaying
-              ? 'bg-primary-container scale-125 shadow-[0_0_12px_rgba(59,130,246,0.6)]'
-              : 'bg-slate-200'
-          }`}
-        />
+        <div className="min-w-12 flex items-center justify-center">
+          <div
+            className={`w-6 h-6 rounded-full transition-all duration-300 ${
+              isPlaying
+                ? 'bg-primary-container scale-125 shadow-[0_0_12px_rgba(59,130,246,0.6)]'
+                : 'bg-slate-200'
+            }`}
+          />
+        </div>
         <span className="text-lg font-medium text-slate-800 leading-tight">
           {text}
         </span>
@@ -58,6 +61,7 @@ export default function PhraseCard({
       <button
         type="button"
         onClick={onToggleFav}
+        aria-label={isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
         className="px-4 border-l border-slate-100 flex items-center justify-center hover:bg-slate-50 active:bg-slate-100 transition-colors"
       >
         <StarIcon
