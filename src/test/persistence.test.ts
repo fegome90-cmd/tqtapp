@@ -84,7 +84,7 @@ describe('FavoritesRepository', () => {
     FavoritesRepository.addFavorite('urg-1');
     const raw = localStorage.getItem('tqt-favorites');
     expect(raw).not.toBeNull();
-    const parsed = JSON.parse(raw!);
+    const parsed = JSON.parse(raw as string);
     expect(parsed._version).toBe(1);
   });
 });
@@ -182,7 +182,7 @@ describe('CustomPhrasesRepository', () => {
     });
     const raw = localStorage.getItem('tqt-custom-phrases');
     expect(raw).not.toBeNull();
-    const parsed = JSON.parse(raw!);
+    const parsed = JSON.parse(raw as string);
     expect(parsed._version).toBe(1);
   });
 
@@ -191,7 +191,7 @@ describe('CustomPhrasesRepository', () => {
       expect(() =>
         CustomPhrasesRepository.create({
           text: '   ',
-          categoryId: 'urgency',
+          categoryId: 'urgente',
           isCustom: true,
         }),
       ).toThrow('Phrase text cannot be empty');
@@ -202,7 +202,7 @@ describe('CustomPhrasesRepository', () => {
       expect(() =>
         CustomPhrasesRepository.create({
           text: longText,
-          categoryId: 'urgency',
+          categoryId: 'urgente',
           isCustom: true,
         }),
       ).toThrow('Phrase text cannot exceed 500 characters');
@@ -211,7 +211,7 @@ describe('CustomPhrasesRepository', () => {
     it('trims input text before persisting', () => {
       const phrase = CustomPhrasesRepository.create({
         text: '  hello world  ',
-        categoryId: 'urgency',
+        categoryId: 'urgente',
         isCustom: true,
       });
       expect(phrase.text).toBe('hello world');
@@ -222,7 +222,7 @@ describe('CustomPhrasesRepository', () => {
       const text = 'a'.repeat(500);
       const phrase = CustomPhrasesRepository.create({
         text,
-        categoryId: 'urgency',
+        categoryId: 'urgente',
         isCustom: true,
       });
       expect(phrase.text).toBe(text);
