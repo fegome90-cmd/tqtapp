@@ -1,3 +1,7 @@
+/**
+ * @file Coverage gap tests for TTS context, emergency CTA, patient hook,
+ * navigation, and key screens (Home, CategoryDetail, Profile).
+ */
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -20,6 +24,7 @@ vi.mock('../data/seed', async (importOriginal) => {
   };
 });
 
+/** Tests for TTSContext fallback, error boundary, and stop-during-speak behavior */
 describe('TTSContext coverage gaps', () => {
   it('createDefaultProvider falls back to MockTTSProvider when speechSynthesis is missing', () => {
     const { unmount } = render(
@@ -89,6 +94,7 @@ describe('TTSContext coverage gaps', () => {
   });
 });
 
+/** Tests for EmergencyCTA animate-pulse visual feedback states */
 describe('EmergencyCTA coverage gaps', () => {
   it('applies animate-pulse class when isPlaying is true', () => {
     render(<EmergencyCTA onClick={vi.fn()} isPlaying={true} />);
@@ -107,6 +113,7 @@ describe('EmergencyCTA coverage gaps', () => {
   });
 });
 
+/** Tests for usePatient context guard (throws outside provider) */
 describe('usePatient coverage gaps', () => {
   it('throws when used outside PatientProvider', () => {
     const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -124,6 +131,7 @@ describe('usePatient coverage gaps', () => {
   });
 });
 
+/** Tests for CategoryDetailScreen empty state and phrase card rendering */
 describe('CategoryDetailScreen coverage gaps', () => {
   const baseProps = {
     playingId: null as string | null,
@@ -157,6 +165,7 @@ describe('CategoryDetailScreen coverage gaps', () => {
   });
 });
 
+/** Tests for HomeScreen category rendering with descriptions */
 describe('HomeScreen coverage gaps', () => {
   it('renders categories with descriptions', () => {
     render(<HomeScreen onCategorySelect={vi.fn()} onEmergency={vi.fn()} />);
@@ -167,6 +176,7 @@ describe('HomeScreen coverage gaps', () => {
   });
 });
 
+/** Tests for ProfileScreen volume toggle and voice bank session rendering */
 describe('ProfileScreen coverage gaps', () => {
   it('toggles volume switch on click', async () => {
     const user = userEvent.setup();
@@ -227,6 +237,7 @@ describe('ProfileScreen coverage gaps', () => {
   });
 });
 
+/** Tests for useNavigation goBack edge case (single-entry history) */
 describe('useNavigation coverage gaps', () => {
   it('goBack does nothing when history has only one entry', () => {
     const { result } = renderHook(() => useNavigation());

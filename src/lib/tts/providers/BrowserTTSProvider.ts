@@ -1,6 +1,10 @@
 import type { TTSProvider, TTSConfig } from '../ports/TTSPort';
 
+/** Web Speech API based TTS provider for browser environments */
 export class BrowserTTSProvider implements TTSProvider {
+  /**
+   * @throws {Error} when Web Speech API unavailable
+   */
   constructor() {
     if (typeof window === 'undefined' || !window.speechSynthesis) {
       throw new Error(
@@ -9,6 +13,11 @@ export class BrowserTTSProvider implements TTSProvider {
     }
   }
 
+  /**
+   * @param text - The text to speak
+   * @param config - Optional TTS configuration (rate, pitch, voice)
+   * @returns {Promise<void>} Resolves when speech completes, rejects on error
+   */
   async speak(text: string, config?: TTSConfig): Promise<void> {
     this.stop();
 
@@ -52,6 +61,7 @@ export class BrowserTTSProvider implements TTSProvider {
     });
   }
 
+  /** Cancels any ongoing speech */
   stop(): void {
     if (typeof window !== 'undefined' && window.speechSynthesis) {
       window.speechSynthesis.cancel();

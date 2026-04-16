@@ -445,11 +445,9 @@ describe('TTS error handling', () => {
     );
 
     // Click emergency button to trigger TTS
-    const btn = screen
-      .getAllByRole('button')
-      .find((b) =>
-        b.textContent?.includes('Llamado de Asistencia'),
-      ) as HTMLButtonElement;
+    const btn = screen.getByRole('button', {
+      name: /Llamar asistencia de enfermería/i,
+    });
     await user.click(btn);
 
     // Error banner should appear
