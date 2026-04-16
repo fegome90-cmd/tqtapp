@@ -12,9 +12,6 @@ class RejectingTTSProvider {
     throw new Error('TTS failed');
   }
   stop(): void {}
-  isSpeaking(): boolean {
-    return false;
-  }
 }
 
 // ---------------------------------------------------------------------------

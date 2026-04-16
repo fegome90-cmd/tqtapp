@@ -1,8 +1,6 @@
 import type { TTSProvider, TTSConfig } from '../ports/TTSPort';
 
 export class BrowserTTSProvider implements TTSProvider {
-  private speaking = false;
-
   constructor() {
     if (typeof window === 'undefined' || !window.speechSynthesis) {
       throw new Error(
@@ -35,21 +33,16 @@ export class BrowserTTSProvider implements TTSProvider {
           }
         }
 
-        this.speaking = true;
-
         utterance.onend = () => {
-          this.speaking = false;
           resolve();
         };
 
         utterance.onerror = (event) => {
-          this.speaking = false;
           reject(new Error(`Speech synthesis error: ${event.error}`));
         };
 
         window.speechSynthesis.speak(utterance);
       } catch (error) {
-        this.speaking = false;
         reject(
           new Error(
             `Failed to initialize speech synthesis: ${error instanceof Error ? error.message : String(error)}`,
@@ -63,10 +56,5 @@ export class BrowserTTSProvider implements TTSProvider {
     if (typeof window !== 'undefined' && window.speechSynthesis) {
       window.speechSynthesis.cancel();
     }
-    this.speaking = false;
-  }
-
-  isSpeaking(): boolean {
-    return this.speaking;
   }
 }

@@ -21,9 +21,4 @@ export interface TTSProvider {
    * Stop any ongoing speech
    */
   stop(): void;
-
-  /**
-   * Check if TTS is currently speaking
-   */
-  isSpeaking(): boolean;
 }

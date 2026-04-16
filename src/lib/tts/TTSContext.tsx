@@ -86,5 +86,3 @@ export function useTTS() {
   }
   return context;
 }
-
-export { TTSContext };
