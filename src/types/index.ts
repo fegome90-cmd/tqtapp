@@ -16,7 +16,7 @@ export interface Category {
   readonly description?: string;
 }
 
-export interface Phrase {
+interface Phrase {
   readonly id: string;
   readonly text: string;
   readonly categoryId: CategoryId;
@@ -41,14 +41,6 @@ export interface PatientProfile {
   readonly createdAt: string; // ISO 8601
 }
 
-export interface ConsentRecord {
-  readonly id: string;
-  readonly patientId: string;
-  readonly type: string;
-  readonly grantedAt: string | null; // ISO 8601 or null
-  readonly version: string;
-}
-
 export interface PhraseTemplate extends Phrase {
   readonly isCustom: false;
   readonly carePhase: CarePhase[];
@@ -64,25 +56,12 @@ export interface CustomPhrase {
   readonly createdAt: string; // ISO 8601
 }
 
-export type AnyPhrase = PhraseTemplate | CustomPhrase;
-
-export type VoiceBankSessionStatus =
-  | 'not-started'
-  | 'in-progress'
-  | 'completed';
-
 export interface VoiceBankSession {
   readonly id: string;
   readonly patientId: string;
-  readonly status: VoiceBankSessionStatus;
+  readonly status: 'not-started' | 'in-progress' | 'completed';
   readonly recordedSamples: number;
   readonly totalSamples: number;
   readonly startedAt: string | null; // ISO 8601 or null
   readonly completedAt: string | null; // ISO 8601 or null
-}
-
-export interface VoiceBankService {
-  startSession(patientId: string): Promise<VoiceBankSession>;
-  recordSample(sessionId: string, audioBlob: Blob): Promise<VoiceBankSession>;
-  getStatus(sessionId: string): Promise<VoiceBankSession>;
 }

@@ -3,7 +3,7 @@ import type { LucideIcon } from 'lucide-react';
 
 export type TabId = 'home' | 'talk' | 'history' | 'profile';
 
-export interface BottomNavProps {
+interface BottomNavProps {
   currentTab: TabId;
   onTabChange: (tab: TabId) => void;
 }
