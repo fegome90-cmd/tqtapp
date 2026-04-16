@@ -28,5 +28,18 @@ test-results/
 .vscode/
 .idea/
 
+# Claude Code
+.claude/
+.pi/
+
+# Playwright MCP
+.playwright-mcp/
+
+# Generated docs/visual
+docs/design/
+openspec/changes/
+visual-diff.html
+*.png
+
 # OS
 Thumbs.db

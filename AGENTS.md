@@ -78,6 +78,17 @@ Commands below are sourced from `package.json`.
 ## Agent Index
 - `.github/agents/tqtapp.agent.md` - implementation agent for React/TypeScript/Vite/Biome work.
 
+## Quality Gates
+<!-- quality-freeze: true -->
+
+- **Coverage threshold**: 90% minimum for branches (`npm run test:coverage`).
+- **Zero debt policy**: always start from green — fix failing tests/lint before adding new code.
+- **CI enforcement**: all gates enforced on `main` and PRs.
+- **Commands**:
+  - `npm run test:coverage` — coverage report; branches must be >= 90%.
+  - `npm run lint` — Biome lint + TypeScript typecheck.
+  - `npm run build` — production build must complete without errors.
+
 ## Done Criteria
 - Requested change implemented.
 - Relevant validation command executed, or blocker explained.
