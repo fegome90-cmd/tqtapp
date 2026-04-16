@@ -1,16 +1,108 @@
 @import "tailwindcss";
 
 :root {
-  --surface-0: #f8f9fa;
-  --surface-1: #ffffff;
-  --surface-2: #f1f5f9;
-  --border-default: rgba(0, 0, 0, 0.08);
-  --border-subtle: rgba(0, 0, 0, 0.04);
-  --border-strong: rgba(0, 0, 0, 0.15);
-  --text-primary: #1e293b;
-  --text-secondary: #475569;
-  --text-tertiary: #94a3b8;
-  --text-muted: #cbd5e1;
+  /* ===== Colors — Surfaces ===== */
+  --color-surface: #f8f9fa;
+  --color-card: #ffffff;
+
+  /* ===== Colors — Brand ===== */
+  --color-primary: #002d60;
+  --color-primary-action: #014389;
+  --color-primary-light: #aac7ff;
+
+  /* ===== Colors — Text ===== */
+  --color-text-heading: #191c1d;
+  --color-text-secondary: #424751;
+  --color-text-muted: #64748b;
+  --color-text-on-action: #ffffff;
+
+  /* ===== Colors — Borders ===== */
+  --color-border: rgba(0, 0, 0, 0.08);
+  --color-border-subtle: rgba(0, 0, 0, 0.04);
+
+  /* ===== Colors — Semantic ===== */
+  --color-error: #ba1a1a;
+  --color-error-bg: #ffdad6;
+
+  /* ===== Typography ===== */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-black: 900;
+  --leading-tight: 1.25;
+
+  /* ===== Touch Targets ===== */
+  --touch-min: 48px;
+
+  /* ===== Border Radius ===== */
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
+  --radius-pill: 2.5rem;
+  --radius-full: 9999px;
+
+  /* ===== Elevation ===== */
+  --elevation-0: none;
+  --elevation-1: 0 8px 20px -6px rgba(0, 0, 0, 0.05);
+  --elevation-2: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+  --elevation-3: 0 20px 40px -12px rgba(1, 67, 137, 0.4);
+
+  /* ===== Motion ===== */
+  --scale-press: 0.95;
+  --scale-press-sm: 0.9;
+  --scale-hover: 1.1;
+
+  /* ===== Glass ===== */
+  --glass-nav: rgba(255, 255, 255, 0.9);
+  --glass-header: rgba(255, 255, 255, 0.8);
+  --glass-blur: 20px;
+  --glass-border: rgba(255, 255, 255, 0.5);
+
+  /* ===== Safe Areas ===== */
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  /* ===== Category Colors — Urgente ===== */
+  --cat-urgente-bg: #fef2f2;
+  --cat-urgente-text: #dc2626;
+
+  /* ===== Category Colors — Dolor ===== */
+  --cat-dolor-bg: #fff7ed;
+  --cat-dolor-text: #ea580c;
+
+  /* ===== Category Colors — Respiracion ===== */
+  --cat-respiracion-bg: #eff6ff;
+  --cat-respiracion-text: #2563eb;
+
+  /* ===== Category Colors — Secreciones ===== */
+  --cat-secreciones-bg: #ecfeff;
+  --cat-secreciones-text: #0891b2;
+
+  /* ===== Category Colors — Posicion ===== */
+  --cat-posicion-bg: #eef2ff;
+  --cat-posicion-text: #4f46e5;
+
+  /* ===== Category Colors — Familia ===== */
+  --cat-familia-bg: #faf5ff;
+  --cat-familia-text: #9333ea;
+
+  /* ===== Category Colors — Necesidades ===== */
+  --cat-necesidades-bg: #ecfdf5;
+  --cat-necesidades-text: #059669;
+
+  /* ===== Category Colors — Emociones ===== */
+  --cat-emociones-bg: #fdf2f8;
+  --cat-emociones-text: #db2777;
+
+  /* ===== Category Colors — Gratitud ===== */
+  --cat-gratitud-bg: #fffbeb;
+  --cat-gratitud-text: #d97706;
 }
 
 body {
@@ -43,9 +135,6 @@ button {
   touch-action: manipulation;
 }
 
-.pb-safe {
-  padding-bottom: env(safe-area-inset-bottom, 1.5rem);
-}
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }

@@ -31,12 +31,9 @@ export function useFavorites() {
     [favoritesSet],
   );
 
-  const favoriteCount = favoritesSet.size;
-
   return {
     favorites,
     isFavorite,
     toggleFavorite,
-    favoriteCount,
   };
 }

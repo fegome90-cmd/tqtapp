@@ -42,13 +42,17 @@ export default function ProfileScreen({
       <TopBar title="Mi Perfil Clínico" />
       <div className="p-5 space-y-8">
         {/* Patient card */}
-        <div className="bg-white p-6 rounded-[2rem] border border-slate-100 flex items-center gap-6">
-          <div className="w-20 h-20 bg-slate-700 rounded-full flex items-center justify-center">
-            <span className="text-3xl font-bold text-white">{initials}</span>
+        <div className="bg-card p-6 rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] flex items-center gap-6">
+          <div className="w-20 h-20 bg-[var(--color-primary)] rounded-[var(--radius-full)] flex items-center justify-center">
+            <span className="text-[var(--text-3xl)] font-[var(--weight-bold)] text-on-action">
+              {initials}
+            </span>
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">{displayName}</h2>
-            <span className="inline-block mt-2 px-4 py-1.5 bg-blue-50 text-blue-700 rounded-full text-sm font-semibold tracking-wide uppercase">
+            <h2 className="text-[var(--text-2xl)] font-[var(--weight-bold)] text-heading">
+              {displayName}
+            </h2>
+            <span className="inline-block mt-2 px-4 py-1.5 bg-[var(--color-primary-light)] text-[var(--color-primary-action)] rounded-[var(--radius-full)] text-[var(--text-sm)] font-[var(--weight-semibold)] tracking-wide uppercase">
               {phaseLabel}
             </span>
           </div>
@@ -56,23 +60,27 @@ export default function ProfileScreen({
 
         {/* Accessibility section */}
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-widest ml-2">
+          <h3 className="text-[var(--text-sm)] font-[var(--weight-bold)] text-secondary uppercase tracking-widest ml-2">
             Accesibilidad
           </h3>
-          <div className="bg-white rounded-3xl border border-slate-200/60 overflow-hidden divide-y divide-slate-100">
+          <div className="bg-card rounded-[var(--radius-lg)] border border-[var(--color-border)] overflow-hidden divide-y divide-[var(--color-border-subtle)]">
             <button
               type="button"
-              className="p-5 flex items-center justify-between active:bg-slate-50 cursor-pointer w-full"
+              role="switch"
+              aria-checked={volumeEnabled}
+              className="p-5 flex items-center justify-between active:bg-[var(--color-surface)] cursor-pointer w-full"
               onClick={() => setVolumeEnabled(!volumeEnabled)}
             >
-              <div className="flex items-center gap-4 text-slate-800">
+              <div className="flex items-center gap-4 text-heading">
                 <Volume2 className="w-6 h-6" aria-hidden="true" />
-                <span className="font-semibold text-lg">Volumen de Voz</span>
+                <span className="font-[var(--weight-semibold)] text-[var(--text-lg)]">
+                  Volumen de Voz
+                </span>
               </div>
               <div
-                className={`w-14 h-8 ${volumeEnabled ? 'bg-blue-600' : 'bg-slate-300'} rounded-full flex items-center px-1 ${volumeEnabled ? 'justify-end' : 'justify-start'}`}
+                className={`w-14 h-8 ${volumeEnabled ? 'bg-primary-action' : 'bg-muted'} rounded-[var(--radius-full)] flex items-center px-1 ${volumeEnabled ? 'justify-end' : 'justify-start'}`}
               >
-                <div className="w-6 h-6 bg-white rounded-full shadow-sm" />
+                <div className="w-6 h-6 bg-card rounded-[var(--radius-full)] shadow-[var(--elevation-0)]" />
               </div>
             </button>
           </div>
@@ -80,37 +88,34 @@ export default function ProfileScreen({
 
         {/* Voice Bank card */}
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-widest ml-2">
+          <h3 className="text-[var(--text-sm)] font-[var(--weight-bold)] text-secondary uppercase tracking-widest ml-2">
             Preparación Quirúrgica
           </h3>
           <button
             type="button"
             onClick={onNavigateVoiceBank}
-            className="w-full bg-gradient-to-br from-blue-600 to-indigo-800 p-7 rounded-[2rem] shadow-md relative overflow-hidden text-left"
+            className="w-full bg-gradient-to-br from-blue-600 to-indigo-800 p-7 rounded-[var(--radius-xl)] shadow-[var(--elevation-2)] relative overflow-hidden text-left"
           >
-            <div className="absolute -right-8 -top-8 w-32 h-32 bg-white rounded-full opacity-10 blur-2xl" />
-            <div className="absolute -left-8 -bottom-8 w-32 h-32 bg-indigo-400 rounded-full opacity-20 blur-2xl" />
-
             <div className="flex items-center justify-between mb-6 relative z-10">
-              <div className="w-14 h-14 bg-white/20 backdrop-blur-md text-white rounded-2xl flex items-center justify-center border border-white/20">
+              <div className="w-14 h-14 bg-white/20 backdrop-blur-md text-on-action rounded-[var(--radius-md)] flex items-center justify-center border border-white/20">
                 <Mic className="w-7 h-7" />
               </div>
-              <span className="px-4 py-1.5 bg-white text-indigo-800 text-sm font-bold rounded-full shadow-sm">
+              <span className="px-4 py-1.5 bg-card text-[var(--color-primary)] text-[var(--text-sm)] font-[var(--weight-bold)] rounded-[var(--radius-full)] shadow-[var(--elevation-1)]">
                 {session.status === 'not-started'
                   ? 'No iniciado'
                   : `Progreso: ${session.recordedSamples} / ${session.totalSamples}`}
               </span>
             </div>
 
-            <h4 className="text-2xl font-bold text-white mb-2 relative z-10">
+            <h4 className="text-[var(--text-2xl)] font-[var(--weight-bold)] text-on-action mb-2 relative z-10">
               Mi Banco de Voz
             </h4>
-            <p className="text-base text-blue-100 mb-6 relative z-10 leading-relaxed">
+            <p className="text-[var(--text-base)] text-white/70 mb-6 relative z-10 leading-normal">
               Graba tu voz antes de la laringectomía para que podamos
               sintetizarla y la app suene exactamente como tú en el futuro.
             </p>
 
-            <span className="block w-full bg-white text-indigo-700 font-bold text-lg py-4 rounded-2xl shadow-sm hover:bg-blue-50 active:scale-[0.98] transition-all relative z-10 text-center">
+            <span className="block w-full bg-card text-[var(--color-primary)] font-[var(--weight-bold)] text-[var(--text-lg)] py-4 rounded-[var(--radius-md)] shadow-[var(--elevation-1)] hover:bg-[var(--color-primary-light)] active:scale-[var(--scale-press)] transition-all relative z-10 text-center">
               Comenzar
             </span>
           </button>

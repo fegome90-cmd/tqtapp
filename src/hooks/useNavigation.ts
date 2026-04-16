@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-export type ScreenId =
+type ScreenId =
   | 'home'
   | 'category-detail'
   | 'favorites'
@@ -8,7 +8,7 @@ export type ScreenId =
   | 'profile'
   | 'preop-voice-bank';
 
-export interface NavigationState {
+interface NavigationState {
   currentScreen: ScreenId;
   canGoBack: boolean;
   navigationParams: Record<string, string>;

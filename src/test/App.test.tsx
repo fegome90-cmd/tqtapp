@@ -1,7 +1,18 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
+import { MainApp } from '../App';
 import App from '../App';
+import { TTSSpeakerProvider } from '../lib/tts/TTSContext';
+import { PatientProvider } from '../hooks/usePatient';
+import type { TTSConfig } from '../lib/tts/ports/TTSPort';
+
+class RejectingTTSProvider {
+  async speak(_text: string, _config?: TTSConfig): Promise<void> {
+    throw new Error('TTS failed');
+  }
+  stop(): void {}
+}
 
 // ---------------------------------------------------------------------------
 // Home tab
@@ -88,12 +99,14 @@ describe('Category detail', () => {
     render(<App />);
     await user.click(screen.getByRole('button', { name: /Dolor/ }));
 
-    const phraseBtn = screen.getByRole('button', { name: /Tengo dolor/i });
+    const phraseBtn = screen
+      .getByText('Tengo dolor')
+      .closest('button') as HTMLButtonElement;
     await user.click(phraseBtn);
 
     // Indicator dot inside the button has the playing class
-    const dot = phraseBtn.querySelector('div');
-    expect(dot?.className).toContain('bg-primary-container');
+    const dot = phraseBtn.querySelector('div > div');
+    expect(dot?.className).toContain('bg-primary-action');
   });
 
   it('adds a phrase to favorites', async () => {
@@ -102,10 +115,8 @@ describe('Category detail', () => {
     await user.click(screen.getByRole('button', { name: /Dolor/ }));
 
     // dol-1 ('Tengo dolor') is NOT a default favorite (empty set)
-    const card = screen
-      .getByRole('button', { name: /Tengo dolor/i })
-      .closest('div') as HTMLElement;
-    const [, starBtn] = within(card).getAllByRole('button');
+    const card = screen.getByText('Tengo dolor').closest('div') as HTMLElement;
+    const starBtn = within(card).getByLabelText('Agregar a favoritos');
     await user.click(starBtn);
 
     // Verify added: navigate to favs and check presence
@@ -119,17 +130,13 @@ describe('Category detail', () => {
     await user.click(screen.getByRole('button', { name: /Dolor/ }));
 
     // First add 'Tengo dolor' to favorites
-    const card = screen
-      .getByRole('button', { name: /Tengo dolor/i })
-      .closest('div') as HTMLElement;
-    const [, starBtn] = within(card).getAllByRole('button');
+    const card = screen.getByText('Tengo dolor').closest('div') as HTMLElement;
+    const starBtn = within(card).getByLabelText('Agregar a favoritos');
     await user.click(starBtn); // Add
 
-    // Then click again to remove
-    const card2 = screen
-      .getByRole('button', { name: /Tengo dolor/i })
-      .closest('div') as HTMLElement;
-    const [, starBtn2] = within(card2).getAllByRole('button');
+    // Then click again to remove — label changed to "Quitar de favoritos"
+    const card2 = screen.getByText('Tengo dolor').closest('div') as HTMLElement;
+    const starBtn2 = within(card2).getByLabelText('Quitar de favoritos');
     await user.click(starBtn2); // Remove
 
     // Verify removed: navigate to favs and check absence
@@ -251,10 +258,8 @@ describe('Favorites tab', () => {
 
     // Navigate to Dolor and add a phrase
     await user.click(screen.getByRole('button', { name: /Dolor/ }));
-    const card = screen
-      .getByRole('button', { name: /Tengo dolor/i })
-      .closest('div') as HTMLElement;
-    const [, starBtn] = within(card).getAllByRole('button');
+    const card = screen.getByText('Tengo dolor').closest('div') as HTMLElement;
+    const starBtn = within(card).getByLabelText('Agregar a favoritos');
     await user.click(starBtn);
 
     // Go to favorites
@@ -268,18 +273,18 @@ describe('Favorites tab', () => {
 
     // Add a favorite first
     await user.click(screen.getByRole('button', { name: /Dolor/ }));
-    const card = screen
-      .getByRole('button', { name: /Tengo dolor/i })
-      .closest('div') as HTMLElement;
-    const [, starBtn] = within(card).getAllByRole('button');
+    const card = screen.getByText('Tengo dolor').closest('div') as HTMLElement;
+    const starBtn = within(card).getByLabelText('Agregar a favoritos');
     await user.click(starBtn);
 
     await user.click(screen.getByRole('button', { name: /^Favoritos$/i }));
 
-    const phraseBtn = screen.getByRole('button', { name: /Tengo dolor/i });
+    const phraseBtn = screen
+      .getByText('Tengo dolor')
+      .closest('button') as HTMLButtonElement;
     await user.click(phraseBtn);
-    const dot = phraseBtn.querySelector('div');
-    expect(dot?.className).toContain('bg-primary-container');
+    const dot = phraseBtn.querySelector('div > div');
+    expect(dot?.className).toContain('bg-primary-action');
   });
 
   it('removes a phrase from favorites via the star button', async () => {
@@ -288,10 +293,8 @@ describe('Favorites tab', () => {
 
     // Add a favorite first
     await user.click(screen.getByRole('button', { name: /Dolor/ }));
-    const card = screen
-      .getByRole('button', { name: /Tengo dolor/i })
-      .closest('div') as HTMLElement;
-    const [, starBtn] = within(card).getAllByRole('button');
+    const card = screen.getByText('Tengo dolor').closest('div') as HTMLElement;
+    const starBtn = within(card).getByLabelText('Agregar a favoritos');
     await user.click(starBtn);
 
     // Go to favorites and remove
@@ -299,9 +302,9 @@ describe('Favorites tab', () => {
 
     // Find the star button within the favorite phrase card
     const favCard = screen
-      .getByRole('button', { name: /Tengo dolor/i })
+      .getByText('Tengo dolor')
       .closest('div') as HTMLElement;
-    const [, removeBtn] = within(favCard).getAllByRole('button');
+    const removeBtn = within(favCard).getByLabelText('Quitar de favoritos');
     await user.click(removeBtn);
 
     expect(screen.queryByText('Tengo dolor')).not.toBeInTheDocument();
@@ -313,10 +316,8 @@ describe('Favorites tab', () => {
 
     // Add a favorite first
     await user.click(screen.getByRole('button', { name: /Dolor/ }));
-    const card = screen
-      .getByRole('button', { name: /Tengo dolor/i })
-      .closest('div') as HTMLElement;
-    const [, starBtn] = within(card).getAllByRole('button');
+    const card = screen.getByText('Tengo dolor').closest('div') as HTMLElement;
+    const starBtn = within(card).getByLabelText('Agregar a favoritos');
     await user.click(starBtn);
 
     // Go to favorites
@@ -324,9 +325,9 @@ describe('Favorites tab', () => {
 
     // Remove the favorite via its star button
     const favCard = screen
-      .getByRole('button', { name: /Tengo dolor/i })
+      .getByText('Tengo dolor')
       .closest('div') as HTMLElement;
-    const [, removeBtn] = within(favCard).getAllByRole('button');
+    const removeBtn = within(favCard).getByLabelText('Quitar de favoritos');
     await user.click(removeBtn);
 
     expect(
@@ -426,5 +427,36 @@ describe('Bottom navigation', () => {
 
     await user.click(screen.getByRole('button', { name: /^Inicio$/i }));
     expect(screen.getByText('Buen día, Paciente')).toBeInTheDocument();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// TTS error handling
+// ---------------------------------------------------------------------------
+describe('TTS error handling', () => {
+  it('shows error banner when TTS fails and can be dismissed', async () => {
+    const user = userEvent.setup();
+    render(
+      <PatientProvider>
+        <TTSSpeakerProvider provider={new RejectingTTSProvider()}>
+          <MainApp />
+        </TTSSpeakerProvider>
+      </PatientProvider>,
+    );
+
+    // Click emergency button to trigger TTS
+    const btn = screen.getByRole('button', {
+      name: /Llamar asistencia de enfermería/i,
+    });
+    await user.click(btn);
+
+    // Error banner should appear
+    const alert = await screen.findByRole('alert');
+    expect(alert).toHaveTextContent('No se pudo reproducir la frase.');
+
+    // Dismiss button should clear the banner
+    const dismissBtn = screen.getByRole('button', { name: /Cerrar error/i });
+    await user.click(dismissBtn);
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 });

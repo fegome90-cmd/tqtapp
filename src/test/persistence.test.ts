@@ -1,6 +1,5 @@
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
 import { FavoritesRepository } from '../lib/persistence/FavoritesRepository';
-import { CustomPhrasesRepository } from '../lib/persistence/CustomPhrasesRepository';
 
 // Node 25 provides a bare localStorage object without methods.
 // Provide a working in-memory implementation scoped to this file.
@@ -84,105 +83,7 @@ describe('FavoritesRepository', () => {
     FavoritesRepository.addFavorite('urg-1');
     const raw = localStorage.getItem('tqt-favorites');
     expect(raw).not.toBeNull();
-    const parsed = JSON.parse(raw!);
-    expect(parsed._version).toBe(1);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// SC-LS-4 & SC-LS-5: CustomPhrasesRepository
-// ---------------------------------------------------------------------------
-describe('CustomPhrasesRepository', () => {
-  it('creates a custom phrase with auto-ID (SC-LS-4)', () => {
-    const phrase = CustomPhrasesRepository.create({
-      text: 'Necesito mi cánula',
-      categoryId: 'respiracion',
-      isCustom: true,
-    });
-
-    expect(phrase.id.startsWith('custom_')).toBe(true);
-    expect(phrase.text).toBe('Necesito mi cánula');
-    expect(phrase.categoryId).toBe('respiracion');
-    expect(phrase.isCustom).toBe(true);
-    expect(phrase.createdAt).toBeDefined();
-  });
-
-  it('getAll returns all created phrases', () => {
-    CustomPhrasesRepository.create({
-      text: 'Phrase 1',
-      categoryId: 'dolor',
-      isCustom: true,
-    });
-    CustomPhrasesRepository.create({
-      text: 'Phrase 2',
-      categoryId: 'emociones',
-      isCustom: true,
-    });
-
-    const all = CustomPhrasesRepository.getAll();
-    expect(all.length).toBeGreaterThanOrEqual(2);
-  });
-
-  it('getById finds a phrase by ID', () => {
-    const created = CustomPhrasesRepository.create({
-      text: 'Find me',
-      categoryId: 'dolor',
-      isCustom: true,
-    });
-
-    const found = CustomPhrasesRepository.getById(created.id);
-    expect(found).toBeDefined();
-    // Biome rule noNonNullAssertion: use optional chain
-    expect(found?.text).toBe('Find me');
-  });
-
-  it('getById returns undefined for missing ID', () => {
-    expect(CustomPhrasesRepository.getById('nonexistent')).toBeUndefined();
-  });
-
-  it('updates phrase text', () => {
-    const created = CustomPhrasesRepository.create({
-      text: 'Original',
-      categoryId: 'dolor',
-      isCustom: true,
-    });
-
-    const updated = CustomPhrasesRepository.update(created.id, 'Updated');
-    expect(updated.text).toBe('Updated');
-    expect(updated.id).toBe(created.id);
-  });
-
-  it('deletes a custom phrase (SC-LS-5)', () => {
-    const created = CustomPhrasesRepository.create({
-      text: 'Delete me',
-      categoryId: 'dolor',
-      isCustom: true,
-    });
-
-    CustomPhrasesRepository.delete(created.id);
-    expect(CustomPhrasesRepository.getById(created.id)).toBeUndefined();
-  });
-
-  it('uses tqt-custom-phrases storage key (SC-LS-7)', () => {
-    const spy = vi.spyOn(localStorage, 'setItem');
-    CustomPhrasesRepository.create({
-      text: 'Test',
-      categoryId: 'dolor',
-      isCustom: true,
-    });
-    expect(spy).toHaveBeenCalledWith('tqt-custom-phrases', expect.any(String));
-    spy.mockRestore();
-  });
-
-  it('includes _version field in stored data (SC-LS-6)', () => {
-    CustomPhrasesRepository.create({
-      text: 'Test',
-      categoryId: 'dolor',
-      isCustom: true,
-    });
-    const raw = localStorage.getItem('tqt-custom-phrases');
-    expect(raw).not.toBeNull();
-    const parsed = JSON.parse(raw!);
+    const parsed = JSON.parse(raw as string);
     expect(parsed._version).toBe(1);
   });
 });

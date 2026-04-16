@@ -27,13 +27,13 @@ export default function FavoritesScreen({
         {favorites.size === 0 ? (
           <div className="text-center py-24 px-6">
             <Star
-              className="w-16 h-16 text-slate-200 mx-auto mb-6"
+              className="w-16 h-16 text-muted mx-auto mb-6"
               aria-hidden="true"
             />
-            <p className="text-slate-500 font-medium text-xl">
+            <p className="text-secondary font-[var(--weight-medium)] text-[var(--text-xl)]">
               Aún no tienes frases favoritas.
             </p>
-            <p className="text-slate-400 text-base mt-2">
+            <p className="text-muted text-[var(--text-base)] mt-2">
               Marca la estrella en cualquier frase frecuente para guardarla
               aquí.
             </p>

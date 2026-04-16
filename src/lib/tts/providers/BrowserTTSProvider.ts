@@ -1,8 +1,10 @@
 import type { TTSProvider, TTSConfig } from '../ports/TTSPort';
 
+/** Web Speech API based TTS provider for browser environments */
 export class BrowserTTSProvider implements TTSProvider {
-  private speaking = false;
-
+  /**
+   * @throws {Error} when Web Speech API unavailable
+   */
   constructor() {
     if (typeof window === 'undefined' || !window.speechSynthesis) {
       throw new Error(
@@ -11,6 +13,11 @@ export class BrowserTTSProvider implements TTSProvider {
     }
   }
 
+  /**
+   * @param text - The text to speak
+   * @param config - Optional TTS configuration (rate, pitch, voice)
+   * @returns {Promise<void>} Resolves when speech completes, rejects on error
+   */
   async speak(text: string, config?: TTSConfig): Promise<void> {
     this.stop();
 
@@ -35,21 +42,16 @@ export class BrowserTTSProvider implements TTSProvider {
           }
         }
 
-        this.speaking = true;
-
         utterance.onend = () => {
-          this.speaking = false;
           resolve();
         };
 
         utterance.onerror = (event) => {
-          this.speaking = false;
           reject(new Error(`Speech synthesis error: ${event.error}`));
         };
 
         window.speechSynthesis.speak(utterance);
       } catch (error) {
-        this.speaking = false;
         reject(
           new Error(
             `Failed to initialize speech synthesis: ${error instanceof Error ? error.message : String(error)}`,
@@ -59,14 +61,10 @@ export class BrowserTTSProvider implements TTSProvider {
     });
   }
 
+  /** Cancels any ongoing speech */
   stop(): void {
     if (typeof window !== 'undefined' && window.speechSynthesis) {
       window.speechSynthesis.cancel();
     }
-    this.speaking = false;
-  }
-
-  isSpeaking(): boolean {
-    return this.speaking;
   }
 }

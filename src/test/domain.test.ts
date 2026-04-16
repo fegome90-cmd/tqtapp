@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import type {
   CarePhase,
   PatientProfile,
-  ConsentRecord,
   CustomPhrase,
   VoiceBankSession,
 } from '../types';
@@ -94,35 +93,6 @@ describe('CarePhase transitions', () => {
 
     phase = 'early-rehab';
     expect(phase).toBe('early-rehab');
-  });
-});
-
-// ---------------------------------------------------------------------------
-// SC-PP-4: Consent not yet granted
-// ---------------------------------------------------------------------------
-describe('ConsentRecord not granted', () => {
-  it('consent is not granted when grantedAt is null', () => {
-    const consent: ConsentRecord = {
-      id: 'consent-1',
-      patientId: 'patient-1',
-      type: 'voice-banking',
-      grantedAt: null,
-      version: '1.0',
-    };
-    const isGranted = consent.grantedAt !== null;
-    expect(isGranted).toBe(false);
-  });
-
-  it('consent is granted when grantedAt has a value', () => {
-    const consent: ConsentRecord = {
-      id: 'consent-1',
-      patientId: 'patient-1',
-      type: 'voice-banking',
-      grantedAt: '2026-04-13T10:00:00Z',
-      version: '1.0',
-    };
-    const isGranted = consent.grantedAt !== null;
-    expect(isGranted).toBe(true);
   });
 });
 

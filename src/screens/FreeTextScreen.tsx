@@ -17,14 +17,15 @@ export default function FreeTextScreen({ onPlay }: FreeTextScreenProps) {
     <div className="h-full flex flex-col transition-opacity duration-300">
       <TopBar title="Texto Libre" />
       <div className="p-5 flex-1 flex flex-col gap-5">
-        <div className="bg-white rounded-3xl border border-slate-200/60 p-5 flex-1 relative flex flex-col min-h-[250px]">
+        <div className="bg-card rounded-[var(--radius-lg)] border border-[var(--color-border)] p-5 flex-1 relative flex flex-col min-h-[250px]">
           <textarea
             value={freeText}
             onChange={(e) => setFreeText(e.target.value)}
-            className="w-full flex-1 resize-none outline-none text-3xl font-medium text-slate-800 placeholder:text-slate-300 bg-transparent"
+            aria-label="Escribe tu mensaje"
+            className="w-full flex-1 resize-none outline-none text-[var(--text-3xl)] font-[var(--weight-medium)] text-heading placeholder:text-muted bg-transparent"
             placeholder="Toca para escribir…"
           />
-          <div className="flex gap-3 overflow-x-auto pb-2 pt-4 no-scrollbar border-t border-slate-50">
+          <div className="flex gap-3 overflow-x-auto pb-2 pt-4 no-scrollbar border-t border-[var(--color-border-subtle)]">
             {SUGGESTIONS.map((sug) => (
               <button
                 type="button"
@@ -32,7 +33,7 @@ export default function FreeTextScreen({ onPlay }: FreeTextScreenProps) {
                 onClick={() =>
                   setFreeText((prev) => (prev ? `${prev} ${sug}` : sug))
                 }
-                className="whitespace-nowrap px-6 py-3 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 rounded-full font-medium text-lg transition-colors"
+                className="whitespace-nowrap px-6 py-3 bg-[var(--color-surface)] hover:bg-[var(--color-border)] active:bg-[var(--color-border-subtle)] text-heading rounded-[var(--radius-full)] font-[var(--weight-medium)] text-[var(--text-lg)] transition-colors"
               >
                 {sug}
               </button>
@@ -43,23 +44,23 @@ export default function FreeTextScreen({ onPlay }: FreeTextScreenProps) {
           type="button"
           onClick={() => onPlay('free_text', freeText)}
           disabled={!freeText.trim() || isSpeaking}
-          className="w-full bg-slate-900 disabled:bg-slate-300 disabled:scale-100 text-white rounded-3xl p-5 flex items-center justify-center gap-3 active:scale-[0.98] transition-all"
+          className="w-full bg-[var(--color-primary-action)] disabled:bg-muted disabled:scale-100 text-on-action rounded-[var(--radius-lg)] p-5 flex items-center justify-center gap-3 active:scale-[var(--scale-press)] transition-all"
         >
           <Play className="w-6 h-6 fill-white" />
-          <span className="text-xl font-semibold tracking-wide">
+          <span className="text-[var(--text-xl)] font-[var(--weight-semibold)] tracking-wide">
             Reproducir Mensaje
           </span>
         </button>
 
-        <div className="mt-2 p-5 rounded-3xl border-2 border-dashed border-slate-200 bg-white/50 flex items-center gap-4 opacity-80">
-          <div className="p-3 bg-blue-100 text-blue-600 rounded-2xl">
+        <div className="mt-2 p-5 rounded-[var(--radius-lg)] border-2 border-dashed border-[var(--color-border)] bg-[var(--color-surface)] flex items-center gap-4 opacity-80">
+          <div className="p-3 bg-[var(--color-primary-light)] text-[var(--color-primary-action)] rounded-[var(--radius-md)]">
             <Mic className="w-7 h-7" />
           </div>
           <div>
-            <h4 className="font-bold text-slate-800 text-lg">
+            <h4 className="font-[var(--weight-bold)] text-heading text-[var(--text-lg)]">
               Dictado por voz y clonación
             </h4>
-            <p className="text-sm text-slate-500 font-medium">
+            <p className="text-[var(--text-sm)] text-secondary font-[var(--weight-medium)]">
               El input predictivo de audio está agendado para la Fase 2.
             </p>
           </div>

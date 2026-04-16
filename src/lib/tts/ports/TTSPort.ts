@@ -21,19 +21,4 @@ export interface TTSProvider {
    * Stop any ongoing speech
    */
   stop(): void;
-
-  /**
-   * Check if TTS is currently speaking
-   */
-  isSpeaking(): boolean;
-}
-
-/**
- * Abstract TTS Port
- * Base interface for TTS functionality in the application
- */
-export abstract class TTSPort {
-  abstract speak(text: string, config?: TTSConfig): Promise<void>;
-  abstract stop(): void;
-  abstract isSpeaking(): boolean;
 }

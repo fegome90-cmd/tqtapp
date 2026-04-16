@@ -103,3 +103,4 @@ Scale: 9px (nav labels), 14px (body), 18px (card titles), 20px (headings), 24px 
 | Zero shadow-sm across all cards | Critique revealed inconsistent shadow-sm on PhraseCard, Profile, Textarea. Removed all — depth via borders only. | 2026-04-13 |
 | Volume button as `<button>` | Was a `<div>` with no hover state. Interactive elements need life. | 2026-04-13 |
 | space-y-8 for Home sections | Breathing room between Emergency CTA and categories. The focal point needs space around it. | 2026-04-13 |
+| Maia theme style | Warmth & Trust personality with cool-warm foundation. Maia provides the emotional tone: calm, approachable, non-clinical. Chosen specifically for laryngectomy patients who are anxious and vulnerable. | 2026-04-14 |

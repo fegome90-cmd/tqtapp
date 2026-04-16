@@ -21,20 +21,18 @@ export default function HomeScreen({
           <EmergencyCTA onClick={onEmergency} />
         </div>
         <div className="space-y-4">
-          <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-widest ml-1">
+          <h2 className="text-[var(--text-sm)] font-[var(--weight-bold)] text-secondary uppercase tracking-widest ml-1">
             Categorías Frecuentes
           </h2>
           <div className="grid grid-cols-2 gap-4">
             {CATEGORIES.map((cat) => {
-              const [bgColor, textColor] = (cat.color || '').split(' ');
               return (
                 <CategoryCard
                   key={cat.id}
                   icon={cat.icon}
                   title={cat.title}
                   description={cat.description || ''}
-                  iconBgColor={bgColor}
-                  iconColor={textColor}
+                  categoryId={cat.id}
                   onClick={() => onCategorySelect(cat.id)}
                 />
               );
