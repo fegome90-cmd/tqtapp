@@ -110,7 +110,7 @@ export default function ProfileScreen({
             <h4 className="text-[var(--text-2xl)] font-[var(--weight-bold)] text-on-action mb-2 relative z-10">
               Mi Banco de Voz
             </h4>
-            <p className="text-[var(--text-base)] text-white/70 mb-6 relative z-10 leading-[var(--leading-relaxed)]">
+            <p className="text-[var(--text-base)] text-white/70 mb-6 relative z-10 leading-normal">
               Graba tu voz antes de la laringectomía para que podamos
               sintetizarla y la app suene exactamente como tú en el futuro.
             </p>
